@@ -88,6 +88,15 @@ void XVirusTotalWidget::reload()
     ui->tableViewScanResult->setModel(pModel);
 
     delete pOldModel;
+
+    ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Interactive);
+    ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Interactive);
+    ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Interactive);
+    ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+
+    ui->tableViewScanResult->setColumnWidth(0,150);
+    ui->tableViewScanResult->setColumnWidth(1,100);
+    ui->tableViewScanResult->setColumnWidth(2,100);
 }
 
 void XVirusTotalWidget::registerShortcuts(bool bState)
