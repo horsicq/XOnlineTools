@@ -23,7 +23,8 @@
 XOnlineTools::XOnlineTools(QObject *pParent)
     : QObject(pParent)
 {
-
+    pdStructEmpty={};
+    g_pPdStruct=&pdStructEmpty;
 }
 
 void XOnlineTools::setApiKey(QString sApiKey)
@@ -34,5 +35,61 @@ void XOnlineTools::setApiKey(QString sApiKey)
 QString XOnlineTools::getApiKey()
 {
     return g_sApiKey;
+}
+
+void XOnlineTools::setPdStruct(XBinary::PDSTRUCT *pPdStruct)
+{
+    g_pPdStruct=pPdStruct;
+}
+
+XBinary::PDSTRUCT *XOnlineTools::getPdStruct()
+{
+    return g_pPdStruct;
+}
+
+void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+{
+    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
+
+    g_pPdStruct->pdRecord.nCurrent=bytesSent;
+    g_pPdStruct->pdRecord.nTotal=bytesTotal;
+
+    if(pReply)
+    {
+        if(g_pPdStruct->bIsStop)
+        {
+            pReply->abort();
+        }
+    }
+}
+
+void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
+
+    g_pPdStruct->pdRecord.nCurrent=bytesReceived;
+    g_pPdStruct->pdRecord.nTotal=bytesTotal;
+
+    pReply->abort();
+
+    if(pReply)
+    {
+        if(g_pPdStruct->bIsStop)
+        {
+            pReply->abort();
+        }
+    }
+}
+
+void XOnlineTools::_finished()
+{
+    if(!(g_pPdStruct->bIsStop))
+    {
+        g_pPdStruct->pdRecord.bSuccess=true;
+    }
+
+    g_pPdStruct->pdRecord.bFinished=true;
+
+    emit completed();
 }
 

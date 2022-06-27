@@ -23,12 +23,12 @@
 XVirusTotal::XVirusTotal(QObject *pParent)
     : XOnlineTools(pParent)
 {
-
+    g_pDevice=nullptr;
 }
 
-QJsonDocument XVirusTotal::getFileInfo(QString sMD5)
+QJsonDocument XVirusTotal::getFileInfo(QString sMD5, bool *pBNotFound)
 {
-    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sMD5));
+    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sMD5,nullptr,pBNotFound));
 }
 
 QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
@@ -40,7 +40,7 @@ bool XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
 {
     QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_UPLOADFILE,sName,pDevice));
 
-    return false; // TODO
+    return true; // TODO
 }
 
 bool XVirusTotal::uploadFile(QString sFileName)
@@ -123,12 +123,31 @@ QString XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
     return sResult;
 }
 
-QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice)
+void XVirusTotal::setDataUpload(QIODevice *pDevice, QString sName, XBinary::PDSTRUCT *pPdStruct)
+{
+    g_pDevice=pDevice;
+    g_sName=sName;
+
+    setPdStruct(pPdStruct);
+}
+
+void XVirusTotal::upload()
+{
+    getPdStruct()->pdRecordOpt.bIsValid=true;
+
+    getPdStruct()->pdRecordOpt.bSuccess=uploadFile(g_pDevice,g_sName);
+
+    getPdStruct()->pdRecordOpt.bFinished=true;
+
+    // TODO emit
+}
+
+QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pBNotFound)
 {
     QByteArray baResult;
 
     QNetworkAccessManager *pNetworkAccessManager=new QNetworkAccessManager(this);
-    QEventLoop loop;
+
     QNetworkRequest networkRequest;
 
     QUrl url=QUrl();
@@ -196,13 +215,26 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
 
     if(pReply)
     {
-        QObject::connect(pReply,&QNetworkReply::finished,&loop,&QEventLoop::quit);
+        QEventLoop loop;
+
+        connect(pReply,&QNetworkReply::finished,&loop,&QEventLoop::quit);
+        connect(pReply,&QNetworkReply::downloadProgress,this,&XOnlineTools::_downloadProgress,Qt::DirectConnection);
+        connect(pReply,&QNetworkReply::uploadProgress,this,&XOnlineTools::_uploadProgress,Qt::DirectConnection);
+        connect(pReply,&QNetworkReply::finished,this,&XOnlineTools::_finished,Qt::DirectConnection);
+
         loop.exec();
 
         if(pReply->error()==QNetworkReply::NoError)
         {
             baResult=pReply->readAll();
-        } // TODO not found error
+        }
+        else if(pReply->error()==QNetworkReply::ContentNotFoundError)
+        {
+            if(pBNotFound)
+            {
+                *pBNotFound=true;
+            }
+        }
         else
         {
             emit errorMessage(pReply->errorString());
@@ -219,9 +251,9 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
         delete pMultiPart;
     }
 
-#ifdef QT_DEBUG
-    qDebug(baResult.data());
-#endif
+//#ifdef QT_DEBUG
+//    qDebug(baResult.data());
+//#endif
 
     return baResult;
 }

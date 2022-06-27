@@ -18,43 +18,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef XONLINETOOLS_H
-#define XONLINETOOLS_H
+#ifndef XONLINETOOLSOPTIONSWIDGET_H
+#define XONLINETOOLSOPTIONSWIDGET_H
 
-#include "xbinary.h"
-#include <QUrl>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QEventLoop>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QHttpMultiPart>
+#include <QWidget>
+#include "xoptions.h"
 
-class XOnlineTools : public QObject
+namespace Ui {
+class XOnlineToolsOptionsWidget;
+}
+
+class XOnlineToolsOptionsWidget : public QWidget
 {
     Q_OBJECT
-public:
-    explicit XOnlineTools(QObject *pParent=nullptr);
 
-    void setApiKey(QString sApiKey);
-    QString getApiKey();
-    void setPdStruct(XBinary::PDSTRUCT *pPdStruct);
-    XBinary::PDSTRUCT *getPdStruct();
+public:
+    explicit XOnlineToolsOptionsWidget(QWidget *pParent=nullptr);
+    ~XOnlineToolsOptionsWidget();
+
+    void setOptions(XOptions *pOptions);
+
+    static void setDefaultValues(XOptions *pOptions);
 
 public slots:
-    void _uploadProgress(qint64 bytesSent,qint64 bytesTotal);
-    void _downloadProgress(qint64 bytesReceived,qint64 bytesTotal);
-    void _finished();
+    void save();
+    void reload();
 
-signals:
-    void errorMessage(QString sErrorMessage);
-    void completed();
+private slots:
+    void on_pushButtonGetVirusTotalApiKey_clicked();
 
 private:
-    QString g_sApiKey;
-    XBinary::PDSTRUCT *g_pPdStruct;
-    XBinary::PDSTRUCT pdStructEmpty;
+    Ui::XOnlineToolsOptionsWidget *ui;
+    XOptions *g_pOptions;
 };
 
-#endif // XONLINETOOLS_H
+#endif // XONLINETOOLSOPTIONSWIDGET_H
