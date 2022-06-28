@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 #include "xshortcutswidget.h"
 #include "xvirustotal.h"
+#include "xonlinetoolsdialogprocess.h"
 
 namespace Ui {
 class XVirusTotalWidget;
@@ -52,7 +53,6 @@ private:
     Ui::XVirusTotalWidget *ui;
     QIODevice *g_pDevice;
     QString g_sMD5;
-    XVirusTotal g_virusTotal;
 };
 
 #endif // XVIRUSTOTALWIDGET_H

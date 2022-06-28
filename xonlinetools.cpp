@@ -25,6 +25,8 @@ XOnlineTools::XOnlineTools(QObject *pParent)
 {
     pdStructEmpty={};
     g_pPdStruct=&pdStructEmpty;
+    g_mode=MODE_UNKNOWN;
+    g_pDevice=nullptr;
 }
 
 void XOnlineTools::setApiKey(QString sApiKey)
@@ -47,7 +49,59 @@ XBinary::PDSTRUCT *XOnlineTools::getPdStruct()
     return g_pPdStruct;
 }
 
-void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+void XOnlineTools::setParameter(QString sParameter)
+{
+    g_sParameter=sParameter;
+}
+
+QString XOnlineTools::getParameter()
+{
+    return g_sParameter;
+}
+
+void XOnlineTools::setMode(MODE mode)
+{
+    g_mode=mode;
+}
+
+XOnlineTools::MODE XOnlineTools::getMode()
+{
+    return g_mode;
+}
+
+void XOnlineTools::setDevice(QIODevice *pDevice)
+{
+    g_pDevice=pDevice;
+}
+
+QIODevice *XOnlineTools::getDevice()
+{
+    return g_pDevice;
+}
+
+bool XOnlineTools::_process()
+{
+    return false;
+}
+
+void XOnlineTools::process()
+{
+    QElapsedTimer scanTimer;
+    scanTimer.start();
+
+    getPdStruct()->pdRecordOpt.bIsValid=true;
+
+    if(!(getPdStruct()->bIsStop))
+    {
+        getPdStruct()->pdRecordOpt.bSuccess=_process();
+    }
+
+    getPdStruct()->pdRecordOpt.bFinished=true;
+
+    emit completed(scanTimer.elapsed());
+}
+
+void XOnlineTools::_uploadProgress(qint64 bytesSent,qint64 bytesTotal)
 {
     QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
@@ -63,14 +117,12 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
     }
 }
 
-void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+void XOnlineTools::_downloadProgress(qint64 bytesReceived,qint64 bytesTotal)
 {
     QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
     g_pPdStruct->pdRecord.nCurrent=bytesReceived;
     g_pPdStruct->pdRecord.nTotal=bytesTotal;
-
-    pReply->abort();
 
     if(pReply)
     {
@@ -89,7 +141,5 @@ void XOnlineTools::_finished()
     }
 
     g_pPdStruct->pdRecord.bFinished=true;
-
-    emit completed();
 }
 

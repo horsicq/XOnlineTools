@@ -23,7 +23,7 @@
 XVirusTotal::XVirusTotal(QObject *pParent)
     : XOnlineTools(pParent)
 {
-    g_pDevice=nullptr;
+
 }
 
 QJsonDocument XVirusTotal::getFileInfo(QString sMD5, bool *pBNotFound)
@@ -123,23 +123,9 @@ QString XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
     return sResult;
 }
 
-void XVirusTotal::setDataUpload(QIODevice *pDevice, QString sName, XBinary::PDSTRUCT *pPdStruct)
+bool XVirusTotal::_process()
 {
-    g_pDevice=pDevice;
-    g_sName=sName;
-
-    setPdStruct(pPdStruct);
-}
-
-void XVirusTotal::upload()
-{
-    getPdStruct()->pdRecordOpt.bIsValid=true;
-
-    getPdStruct()->pdRecordOpt.bSuccess=uploadFile(g_pDevice,g_sName);
-
-    getPdStruct()->pdRecordOpt.bFinished=true;
-
-    // TODO emit
+    return false;
 }
 
 QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pBNotFound)

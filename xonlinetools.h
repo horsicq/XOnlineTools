@@ -34,7 +34,15 @@
 class XOnlineTools : public QObject
 {
     Q_OBJECT
+
 public:
+    enum MODE
+    {
+        MODE_UNKNOWN=0,
+        MODE_DOWNLOAD,
+        MODE_UPLOAD
+    };
+
     explicit XOnlineTools(QObject *pParent=nullptr);
 
     void setApiKey(QString sApiKey);
@@ -42,19 +50,33 @@ public:
     void setPdStruct(XBinary::PDSTRUCT *pPdStruct);
     XBinary::PDSTRUCT *getPdStruct();
 
+    void setParameter(QString sParameter);
+    QString getParameter();
+    void setMode(MODE mode);
+    MODE getMode();
+    void setDevice(QIODevice *pDevice);
+    QIODevice *getDevice();
+
+protected:
+    virtual bool _process();
+
 public slots:
+    void process();
     void _uploadProgress(qint64 bytesSent,qint64 bytesTotal);
     void _downloadProgress(qint64 bytesReceived,qint64 bytesTotal);
     void _finished();
 
 signals:
     void errorMessage(QString sErrorMessage);
-    void completed();
+    void completed(qint64 nElapsed);
 
 private:
     QString g_sApiKey;
     XBinary::PDSTRUCT *g_pPdStruct;
     XBinary::PDSTRUCT pdStructEmpty;
+    MODE g_mode;
+    QIODevice *g_pDevice;
+    QString g_sParameter;
 };
 
 #endif // XONLINETOOLS_H

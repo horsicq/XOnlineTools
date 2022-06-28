@@ -18,49 +18,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef XVIRUSTOTAL_H
-#define XVIRUSTOTAL_H
+#ifndef XONLINETOOLSDIALOGPROCESS_H
+#define XONLINETOOLSDIALOGPROCESS_H
 
+#include "xdialogprocess.h"
 #include "xonlinetools.h"
 
-class XVirusTotal : public XOnlineTools
+class XOnlineToolsDialogProcess : public XDialogProcess
 {
     Q_OBJECT
+
 public:
-    enum RTYPE
-    {
-        RTYPE_UNKNOWN=0,
-        RTYPE_GETFILEINFO,
-        RTYPE_UPLOADFILE,
-        RTYPE_GETFILEANALYSES
-    };
-
-    struct SCAN_RESULT
-    {
-        QString category;
-        QString engine_name;
-        QString engine_version;
-        QString result;
-        QString method;
-        QString engine_update;
-    };
-
-    explicit XVirusTotal(QObject *pParent=nullptr);
-
-    QJsonDocument getFileInfo(QString sMD5,bool *pBNotFound=nullptr);
-    QJsonDocument getFileAnalyses(QString sId);
-    bool uploadFile(QIODevice *pDevice,QString sName="");
-    bool uploadFile(QString sFileName);
-    QList<SCAN_RESULT> getScanResults(QString sMD5);
-    static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc);
-    QString getScanInfo(QString sMD5);
-    static QString getScanInfo(QJsonDocument *pJsonDoc);
-
-protected:
-    virtual bool _process();
+    explicit XOnlineToolsDialogProcess(QWidget *pParent,XOnlineTools *pOnlineTools);
+    ~XOnlineToolsDialogProcess();
 
 private:
-    QByteArray sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice=nullptr,bool *pBNotFound=nullptr);
+    XOnlineTools *g_pOnlineTools;
 };
 
-#endif // XVIRUSTOTAL_H
+#endif // XONLINETOOLSDIALOGPROCESS_H

@@ -48,19 +48,30 @@ void XVirusTotalWidget::setData(QIODevice *pDevice)
 void XVirusTotalWidget::reload()
 {
     QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
-    g_virusTotal.setApiKey(sApiKey);
+
+    XVirusTotal virusTotal;
+
+    virusTotal.setApiKey(sApiKey);
 
     bool bIsNotFound=false;
 
-    QJsonDocument jsonDocument=g_virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
+    QJsonDocument jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
 
     if(bIsNotFound)
     {
         // TODO upload
         if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file to VirusTotal for analyze?"))==QMessageBox::Yes)
         {
-            g_virusTotal.uploadFile(g_pDevice,g_sMD5);
-            // TODO
+            XVirusTotal _virusTotal;
+            _virusTotal.setApiKey(sApiKey);
+            _virusTotal.setDevice(g_pDevice);
+            _virusTotal.setParameter(g_sMD5);
+            _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+
+            XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
+
+            xotdp.showDialogDelay(1000);
+            // TODO wait
         }
     }
 
