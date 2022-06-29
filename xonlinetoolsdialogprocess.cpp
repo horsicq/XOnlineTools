@@ -20,13 +20,30 @@
  */
 #include "xonlinetoolsdialogprocess.h"
 
-XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools) :
+XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent,XOnlineTools *pOnlineTools) :
     XDialogProcess(pParent)
 {
     g_pOnlineTools=pOnlineTools;
+
+    pOnlineTools->setPdStruct(getPdStruct());
+
+    g_pThread=new QThread;
+
+    pOnlineTools->moveToThread(g_pThread);
+
+    connect(g_pThread,SIGNAL(started()),pOnlineTools,SLOT(process()));
+    connect(pOnlineTools,SIGNAL(completed(qint64)),this,SLOT(onCompleted(qint64)));
+    connect(pOnlineTools,SIGNAL(errorMessage(QString)),this,SLOT(errorMessage(QString)));
+
+    g_pThread->start();
 }
 
 XOnlineToolsDialogProcess::~XOnlineToolsDialogProcess()
 {
+    stop();
 
+    g_pThread->quit();
+    g_pThread->wait();
+
+    delete g_pThread;
 }

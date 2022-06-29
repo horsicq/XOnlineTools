@@ -38,9 +38,22 @@ QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
 
 bool XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
 {
+    bool bResult=false;
+
     QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_UPLOADFILE,sName,pDevice));
 
-    return true; // TODO
+    if(jsDoc.isObject())
+    {
+        QString sID=jsDoc.object()["data"].toObject()["id"].toString();
+
+        if(sID!="")
+        {
+            // TODO mb more checks
+            bResult=true;
+        }
+    }
+
+    return bResult;
 }
 
 bool XVirusTotal::uploadFile(QString sFileName)
@@ -125,7 +138,14 @@ QString XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
 
 bool XVirusTotal::_process()
 {
-    return false;
+    bool bResult=false;
+
+    if(getMode()==MODE_UPLOAD)
+    {
+        bResult=uploadFile(getDevice(),getParameter());
+    }
+
+    return bResult;
 }
 
 QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pBNotFound)
@@ -237,9 +257,9 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
         delete pMultiPart;
     }
 
-//#ifdef QT_DEBUG
-//    qDebug(baResult.data());
-//#endif
+#ifdef QT_DEBUG
+    qDebug(baResult.data());
+#endif
 
     return baResult;
 }

@@ -77,7 +77,7 @@ void XVirusTotalWidget::reload()
 
     if(!bIsNotFound)
     {
-        QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanResults(&jsonDocument);
+        QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanResults(&jsonDocument);;
 
         QAbstractItemModel *pOldModel=ui->tableViewScanResult->model();
 

@@ -34,6 +34,7 @@ public:
 
 private:
     XOnlineTools *g_pOnlineTools;
+    QThread *g_pThread;
 };
 
 #endif // XONLINETOOLSDIALOGPROCESS_H
