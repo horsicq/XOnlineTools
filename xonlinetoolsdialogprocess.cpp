@@ -41,6 +41,7 @@ XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent,XOnlineToo
 XOnlineToolsDialogProcess::~XOnlineToolsDialogProcess()
 {
     stop();
+    waitForFinished();
 
     g_pThread->quit();
     g_pThread->wait();
