@@ -71,7 +71,8 @@ void XVirusTotalWidget::reload()
             XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
 
             xotdp.showDialogDelay(1000);
-            // TODO wait
+
+            jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
         }
     }
 

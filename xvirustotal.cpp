@@ -36,41 +36,35 @@ QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES,sId));
 }
 
-bool XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
+QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
 {
-    bool bResult=false;
+    QString sResult;
 
     QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_UPLOADFILE,sName,pDevice));
 
     if(jsDoc.isObject())
     {
-        QString sID=jsDoc.object()["data"].toObject()["id"].toString();
-
-        if(sID!="")
-        {
-            // TODO mb more checks
-            bResult=true;
-        }
+        sResult=jsDoc.object()["data"].toObject()["id"].toString();
     }
 
-    return bResult;
+    return sResult;
 }
 
-bool XVirusTotal::uploadFile(QString sFileName)
+QString XVirusTotal::uploadFile(QString sFileName)
 {
-    bool bResult=false;
+    QString sResult;
 
     QFile file;
     file.setFileName(sFileName);
 
     if(file.open(QIODevice::ReadOnly))
     {
-        bResult=uploadFile(&file);
+        sResult=uploadFile(&file);
 
         file.close();
     }
 
-    return bResult;
+    return sResult;
 }
 
 QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sMD5)
@@ -140,10 +134,44 @@ bool XVirusTotal::_process()
 {
     bool bResult=false;
 
+    QElapsedTimer scanTimer;
+    scanTimer.start();
+
+    getPdStruct()->pdRecordOpt.bIsValid=true;
+
     if(getMode()==MODE_UPLOAD)
     {
-        bResult=uploadFile(getDevice(),getParameter());
+        QString sId=uploadFile(getDevice(),getParameter());
+
+        if(sId!="")
+        {
+            while(!(getPdStruct()->bIsStop))
+            {
+                QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES,sId));
+
+                if(jsDoc.isObject())
+                {
+                    getPdStruct()->pdRecordOpt.sStatus=jsDoc.object()["data"].toObject()["attributes"].toObject()["status"].toString();
+                }
+
+                if((getPdStruct()->pdRecordOpt.sStatus=="")||(getPdStruct()->pdRecordOpt.sStatus=="completed"))
+                {
+                    break;
+                }
+
+                QThread::msleep(5000);
+            }
+        }
     }
+
+    if(!(getPdStruct()->bIsStop))
+    {
+        getPdStruct()->pdRecordOpt.bSuccess=true;
+    }
+
+    getPdStruct()->pdRecordOpt.bFinished=true;
+
+    emit completed(scanTimer.elapsed());
 
     return bResult;
 }
@@ -233,6 +261,11 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
         if(pReply->error()==QNetworkReply::NoError)
         {
             baResult=pReply->readAll();
+
+            if(pBNotFound)
+            {
+                *pBNotFound=false;
+            }
         }
         else if(pReply->error()==QNetworkReply::ContentNotFoundError)
         {

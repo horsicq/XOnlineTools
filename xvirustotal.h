@@ -22,6 +22,7 @@
 #define XVIRUSTOTAL_H
 
 #include "xonlinetools.h"
+#include <QThread>
 
 class XVirusTotal : public XOnlineTools
 {
@@ -49,8 +50,8 @@ public:
 
     QJsonDocument getFileInfo(QString sMD5,bool *pBNotFound=nullptr);
     QJsonDocument getFileAnalyses(QString sId);
-    bool uploadFile(QIODevice *pDevice,QString sName="");
-    bool uploadFile(QString sFileName);
+    QString uploadFile(QIODevice *pDevice,QString sName="");
+    QString uploadFile(QString sFileName);
     QList<SCAN_RESULT> getScanResults(QString sMD5);
     static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc);
     QString getScanInfo(QString sMD5);
