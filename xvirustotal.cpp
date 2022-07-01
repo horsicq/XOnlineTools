@@ -176,7 +176,7 @@ bool XVirusTotal::_process()
     return bResult;
 }
 
-QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pBNotFound)
+QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice,bool *pBNotFound)
 {
     QByteArray baResult;
 
