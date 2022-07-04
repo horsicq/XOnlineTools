@@ -33,7 +33,8 @@ public:
         RTYPE_UNKNOWN=0,
         RTYPE_GETFILEINFO,
         RTYPE_UPLOADFILE,
-        RTYPE_GETFILEANALYSES
+        RTYPE_GETFILEANALYSES,
+        RTYPE_RESCANFILE,
     };
 
     struct SCAN_RESULT
@@ -52,6 +53,7 @@ public:
     QJsonDocument getFileAnalyses(QString sId);
     QString uploadFile(QIODevice *pDevice,QString sName="");
     QString uploadFile(QString sFileName);
+    QString rescanFile(QString sMD5);
     QList<SCAN_RESULT> getScanResults(QString sMD5);
     static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc);
     QString getScanInfo(QString sMD5);

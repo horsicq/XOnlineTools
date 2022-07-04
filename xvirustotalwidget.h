@@ -34,12 +34,20 @@ class XVirusTotalWidget : public XShortcutsWidget
 {
     Q_OBJECT
 
+    enum MODE
+    {
+        MODE_UNKNOWN=0,
+        MODE_NOAPIKEY,
+        MODE_NOTFOUND,
+        MODE_EXISTS
+    };
+
 public:
     explicit XVirusTotalWidget(QWidget *pParent=nullptr);
     ~XVirusTotalWidget();
 
     void setData(QIODevice *pDevice);
-    void reload();
+    void reload(bool bRescan);
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -53,6 +61,7 @@ private:
     Ui::XVirusTotalWidget *ui;
     QIODevice *g_pDevice;
     QString g_sMD5;
+    MODE g_mode;
 };
 
 #endif // XVIRUSTOTALWIDGET_H

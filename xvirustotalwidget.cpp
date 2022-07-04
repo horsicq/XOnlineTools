@@ -27,6 +27,8 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) :
 {
     ui->setupUi(this);
 
+    g_mode=MODE_UNKNOWN;
+
     g_pDevice=nullptr;
 }
 
@@ -42,25 +44,25 @@ void XVirusTotalWidget::setData(QIODevice *pDevice)
 
     g_sMD5=XBinary::getHash(XBinary::HASH_MD5,pDevice);
 
-    reload();
+    reload(false);
 }
 
-void XVirusTotalWidget::reload()
+void XVirusTotalWidget::reload(bool bRescan)
 {
+    g_mode=MODE_UNKNOWN;
+
     QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    XVirusTotal virusTotal;
-
-    virusTotal.setApiKey(sApiKey);
-
-    bool bIsNotFound=false;
-
-    QJsonDocument jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
-
-    if(bIsNotFound)
+    if(sApiKey!="")
     {
-        // TODO upload
-        if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file to VirusTotal for analyze?"))==QMessageBox::Yes)
+        XVirusTotal virusTotal;
+
+        virusTotal.setApiKey(sApiKey);
+
+        QJsonDocument jsonDocument;
+        bool bIsNotFound=false;
+
+        if(bRescan)
         {
             XVirusTotal _virusTotal;
             _virusTotal.setApiKey(sApiKey);
@@ -74,54 +76,102 @@ void XVirusTotalWidget::reload()
 
             jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
         }
-    }
-
-    if(!bIsNotFound)
-    {
-        QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanResults(&jsonDocument);;
-
-        QAbstractItemModel *pOldModel=ui->tableViewScanResult->model();
-
-        qint32 nNumberOfRecords=listRecords.count();
-
-        QStandardItemModel *pModel=new QStandardItemModel(nNumberOfRecords,4,this);
-
-        pModel->setHeaderData(0,Qt::Horizontal,tr("Scan"));
-        pModel->setHeaderData(1,Qt::Horizontal,tr("Version"));
-        pModel->setHeaderData(2,Qt::Horizontal,tr("Date"));
-        pModel->setHeaderData(3,Qt::Horizontal,tr("Result"));
-
-        for(qint32 i=0;i<nNumberOfRecords;i++)
+        else
         {
-            QStandardItem *pItemScan=new QStandardItem;
-            pItemScan->setText(listRecords.at(i).engine_name);
-            pModel->setItem(i,0,pItemScan);
+            jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
 
-            QStandardItem *pItemVersion=new QStandardItem;
-            pItemVersion->setText(listRecords.at(i).engine_version);
-            pModel->setItem(i,1,pItemVersion);
+            if(bIsNotFound)
+            {
+                // TODO upload
+                if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file for analyze?"))==QMessageBox::Yes)
+                {
+                    XVirusTotal _virusTotal;
+                    _virusTotal.setApiKey(sApiKey);
+                    _virusTotal.setDevice(g_pDevice);
+                    _virusTotal.setParameter(g_sMD5);
+                    _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
-            QStandardItem *pItemDate=new QStandardItem;
-            pItemDate->setText(listRecords.at(i).engine_update);
-            pModel->setItem(i,2,pItemDate);
+                    XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
 
-            QStandardItem *pItemResult=new QStandardItem;
-            pItemResult->setText(listRecords.at(i).result);
-            pModel->setItem(i,3,pItemResult);
+                    xotdp.showDialogDelay(1000);
+
+                    jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
+                }
+            }
         }
 
-        ui->tableViewScanResult->setModel(pModel);
+        if(!bIsNotFound)
+        {
+            g_mode=MODE_EXISTS;
 
-        delete pOldModel;
+            QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanResults(&jsonDocument);;
 
-        ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Interactive);
-        ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Interactive);
-        ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Interactive);
-        ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+            QAbstractItemModel *pOldModel=ui->tableViewScanResult->model();
 
-        ui->tableViewScanResult->setColumnWidth(0,150);
-        ui->tableViewScanResult->setColumnWidth(1,100);
-        ui->tableViewScanResult->setColumnWidth(2,100);
+            qint32 nNumberOfRecords=listRecords.count();
+
+            QStandardItemModel *pModel=new QStandardItemModel(nNumberOfRecords,4,this);
+
+            pModel->setHeaderData(0,Qt::Horizontal,tr("Scan"));
+            pModel->setHeaderData(1,Qt::Horizontal,tr("Version"));
+            pModel->setHeaderData(2,Qt::Horizontal,tr("Date"));
+            pModel->setHeaderData(3,Qt::Horizontal,tr("Result"));
+
+            for(qint32 i=0;i<nNumberOfRecords;i++)
+            {
+                QStandardItem *pItemScan=new QStandardItem;
+                pItemScan->setText(listRecords.at(i).engine_name);
+                pModel->setItem(i,0,pItemScan);
+
+                QStandardItem *pItemVersion=new QStandardItem;
+                pItemVersion->setText(listRecords.at(i).engine_version);
+                pModel->setItem(i,1,pItemVersion);
+
+                QStandardItem *pItemDate=new QStandardItem;
+                pItemDate->setText(listRecords.at(i).engine_update);
+                pModel->setItem(i,2,pItemDate);
+
+                QStandardItem *pItemResult=new QStandardItem;
+                pItemResult->setText(listRecords.at(i).result);
+                pModel->setItem(i,3,pItemResult);
+            }
+
+            ui->tableViewScanResult->setModel(pModel);
+
+            delete pOldModel;
+
+            ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Interactive);
+            ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Interactive);
+            ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Interactive);
+            ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+
+            ui->tableViewScanResult->setColumnWidth(0,150);
+            ui->tableViewScanResult->setColumnWidth(1,100);
+            ui->tableViewScanResult->setColumnWidth(2,100);
+        }
+        else
+        {
+            g_mode=MODE_NOTFOUND;
+        }
+    }
+    else
+    {
+        g_mode=MODE_NOAPIKEY;
+
+        QString sInfo=tr("Please use valid API key");
+
+        sInfo+=tr("\n\n %1 -> %2 -> %3").arg(tr("Options"),tr("Online tools"),QString("VirusTotal API key"));
+
+        QMessageBox::critical(XOptions::getMainWidget(this),tr("Error"),sInfo);
+    }
+
+    if(g_mode==MODE_EXISTS)
+    {
+        ui->pushButtonRescan->setEnabled(true);
+    }
+    else
+    {
+        ui->pushButtonRescan->setEnabled(false);
     }
 }
 
@@ -133,7 +183,7 @@ void XVirusTotalWidget::registerShortcuts(bool bState)
 
 void XVirusTotalWidget::on_pushButtonReload_clicked()
 {
-    reload();
+    reload(false);
 }
 
 void XVirusTotalWidget::on_pushButtonSave_clicked()
@@ -141,9 +191,7 @@ void XVirusTotalWidget::on_pushButtonSave_clicked()
     // TODO
 }
 
-
 void XVirusTotalWidget::on_pushButtonRescan_clicked()
 {
-
+    reload(true);
 }
-

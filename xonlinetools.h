@@ -40,7 +40,8 @@ public:
     {
         MODE_UNKNOWN=0,
         MODE_DOWNLOAD,
-        MODE_UPLOAD
+        MODE_UPLOAD,
+        MODE_RESCAN
     };
 
     explicit XOnlineTools(QObject *pParent=nullptr);

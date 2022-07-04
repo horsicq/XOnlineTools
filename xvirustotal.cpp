@@ -36,7 +36,7 @@ QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES,sId));
 }
 
-QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
+QString XVirusTotal::uploadFile(QIODevice *pDevice,QString sName)
 {
     QString sResult;
 
@@ -62,6 +62,20 @@ QString XVirusTotal::uploadFile(QString sFileName)
         sResult=uploadFile(&file);
 
         file.close();
+    }
+
+    return sResult;
+}
+
+QString XVirusTotal::rescanFile(QString sMD5)
+{
+    QString sResult;
+
+    QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_RESCANFILE,sMD5));
+
+    if(jsDoc.isObject())
+    {
+        sResult=jsDoc.object()["data"].toObject()["id"].toString();
     }
 
     return sResult;
@@ -139,9 +153,18 @@ bool XVirusTotal::_process()
 
     getPdStruct()->pdRecordOpt.bIsValid=true;
 
-    if(getMode()==MODE_UPLOAD)
+    if((getMode()==MODE_UPLOAD)||(getMode()==MODE_RESCAN))
     {
-        QString sId=uploadFile(getDevice(),getParameter());
+        QString sId;
+
+        if(getMode()==MODE_UPLOAD)
+        {
+            sId=uploadFile(getDevice(),getParameter());
+        }
+        else if(getMode()==MODE_RESCAN)
+        {
+            sId=rescanFile(getParameter());
+        }
 
         if(sId!="")
         {
@@ -159,7 +182,7 @@ bool XVirusTotal::_process()
                     break;
                 }
 
-                QThread::msleep(5000);
+                QThread::msleep(1000);
             }
         }
     }
@@ -202,6 +225,10 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
     {
         sUrlPath="/api/v3/analyses/"+sParameter;
     }
+    else if(rtype==RTYPE_GETFILEANALYSES)
+    {
+        sUrlPath="/api/v3/files/"+sParameter+"/analyse";
+    }
 
     url.setPath(sUrlPath);
 
@@ -218,6 +245,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
     }
     else if(rtype==RTYPE_UPLOADFILE)
     {
+        // TODO files > 32 mb
         pMultiPart=new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
         QHttpPart filePart;
