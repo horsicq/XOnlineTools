@@ -47,6 +47,12 @@ public:
         QString engine_update;
     };
 
+    struct SCAN_INFO
+    {
+        QDateTime dtFirstScan;
+        QDateTime dtLastScan;
+    };
+
     explicit XVirusTotal(QObject *pParent=nullptr);
 
     QJsonDocument getFileInfo(QString sMD5,bool *pBNotFound=nullptr);
@@ -54,10 +60,10 @@ public:
     QString uploadFile(QIODevice *pDevice,QString sName="");
     QString uploadFile(QString sFileName);
     QString rescanFile(QString sMD5);
-    QList<SCAN_RESULT> getScanResults(QString sMD5);
-    static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc);
-    QString getScanInfo(QString sMD5);
-    static QString getScanInfo(QJsonDocument *pJsonDoc);
+    QList<SCAN_RESULT> getScanResults(QString sMD5,bool bShowDetected);
+    static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc,bool bShowDetected);
+    SCAN_INFO getScanInfo(QString sMD5);
+    static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc);
 
 protected:
     virtual bool _process();

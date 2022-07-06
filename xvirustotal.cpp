@@ -81,14 +81,14 @@ QString XVirusTotal::rescanFile(QString sMD5)
     return sResult;
 }
 
-QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sMD5)
+QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sMD5,bool bShowDetected)
 {
     QJsonDocument jsonDoc=getFileInfo(sMD5);
 
-    return getScanResults(&jsonDoc);
+    return getScanResults(&jsonDoc,bShowDetected);
 }
 
-QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QJsonDocument *pJsonDoc)
+QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QJsonDocument *pJsonDoc,bool bShowDetected)
 {
     QList<SCAN_RESULT> listResult;
 
@@ -110,38 +110,37 @@ QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QJsonDocument *pJson
             record.method=jsonObject[slList.at(i)].toObject()["method"].toString();
             record.engine_update=jsonObject[slList.at(i)].toObject()["engine_update"].toString();
 
-            listResult.append(record);
+            if((!bShowDetected)||(bShowDetected&&(record.result!="")))
+            {
+                listResult.append(record);
+            }
         }
     }
 
     return listResult;
 }
 
-QString XVirusTotal::getScanInfo(QString sMD5)
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5)
 {
     QJsonDocument jsonDoc=getFileInfo(sMD5);
 
     return getScanInfo(&jsonDoc);
 }
 
-QString XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
 {
-    QString sResult;
+    SCAN_INFO result={};
 
     if(pJsonDoc->isObject())
     {
-        QJsonObject jsonDataObject=pJsonDoc->object()["data"].toObject();
+        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toString();
+        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toString();
 
-        QStringList slDataList=jsonDataObject.keys();
-        qint32 nDataCount=slDataList.count();
-
-        for(qint32 i=0;i<nDataCount;i++)
-        {
-
-        }
+        result.dtFirstScan=XBinary::valueToTime(sFirstDate.toULongLong(),XBinary::DT_TYPE_POSIX);
+        result.dtLastScan=XBinary::valueToTime(sLastDate.toULongLong(),XBinary::DT_TYPE_POSIX);
     }
 
-    return sResult;
+    return result;
 }
 
 bool XVirusTotal::_process()

@@ -48,6 +48,7 @@ public:
 
     void setData(QIODevice *pDevice);
     void reload(bool bRescan);
+    void showRecords();
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -56,12 +57,14 @@ private slots:
     void on_pushButtonReload_clicked();
     void on_pushButtonSave_clicked();
     void on_pushButtonRescan_clicked();
+    void on_checkBoxShowDetects_stateChanged(int nValue);
 
 private:
     Ui::XVirusTotalWidget *ui;
     QIODevice *g_pDevice;
     QString g_sMD5;
     MODE g_mode;
+    QJsonDocument g_jsonDocument;
 };
 
 #endif // XVIRUSTOTALWIDGET_H

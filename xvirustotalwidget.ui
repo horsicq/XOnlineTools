@@ -36,6 +36,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QCheckBox" name="checkBoxShowDetects">
+       <property name="text">
+        <string>Show detects</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
