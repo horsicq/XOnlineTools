@@ -53,11 +53,11 @@ void XVirusTotalWidget::reload(bool bRescan)
 
     g_jsonDocument=QJsonDocument();
 
-    QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
-
-    if(sApiKey!="")
+    if(checkVirusTotalKey(getGlobalOptions(),XOptions::getMainWidget(this)))
     {
         XVirusTotal virusTotal;
+
+        QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
         virusTotal.setApiKey(sApiKey);
 
@@ -115,12 +115,6 @@ void XVirusTotalWidget::reload(bool bRescan)
     else
     {
         g_mode=MODE_NOAPIKEY;
-
-        QString sInfo=tr("Please use valid API key");
-
-        sInfo+=tr("\n\n %1 -> %2 -> %3").arg(tr("Options"),tr("Online tools"),QString("VirusTotal API key"));
-
-        QMessageBox::critical(XOptions::getMainWidget(this),tr("Error"),sInfo);
     }
 
     if(g_mode==MODE_EXISTS)
@@ -181,6 +175,41 @@ void XVirusTotalWidget::showRecords()
     ui->tableViewScanResult->setColumnWidth(0,150);
     ui->tableViewScanResult->setColumnWidth(1,100);
     ui->tableViewScanResult->setColumnWidth(2,100);
+
+    XVirusTotal::SCAN_INFO scanInfo=XVirusTotal::getScanInfo(&g_jsonDocument);
+
+    if(scanInfo.dtFirstScan.isValid())
+    {
+        ui->lineEditFirst->setText(scanInfo.dtFirstScan.toString("yyyy-MM-dd hh:mm:ss"));
+    }
+
+    if(scanInfo.dtLastScan.isValid())
+    {
+        ui->lineEditLast->setText(scanInfo.dtLastScan.toString("yyyy-MM-dd hh:mm:ss"));
+    }
+}
+
+bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
+{
+    bool bResult=false;
+
+    QString sApiKey=pOptions->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
+
+    if(sApiKey!="")
+    {
+        bResult=true;
+    }
+
+    if(!bResult)
+    {
+        QString sInfo=tr("Please use valid API key");
+
+        sInfo+=tr("\n\n %1 -> %2 -> %3").arg(tr("Options"),tr("Online tools"),QString("VirusTotal API key"));
+
+        QMessageBox::critical(pParent,tr("Error"),sInfo);
+    }
+
+    return bResult;
 }
 
 void XVirusTotalWidget::registerShortcuts(bool bState)

@@ -4,6 +4,7 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
+    $$PWD/dialogxvirustotal.h \
     $$PWD/xonlinetools.h \
     $$PWD/xonlinetoolsdialogprocess.h \
     $$PWD/xonlinetoolsoptionswidget.h \
@@ -12,6 +13,7 @@ HEADERS += \
     $$PWD/xvirustotalwidget.h
 
 SOURCES += \
+    $$PWD/dialogxvirustotal.cpp \
     $$PWD/xonlinetools.cpp \
     $$PWD/xonlinetoolsdialogprocess.cpp \
     $$PWD/xonlinetoolsoptionswidget.cpp \
@@ -25,6 +27,7 @@ SOURCES += \
 }
 
 FORMS += \
+    $$PWD/dialogxvirustotal.ui \
     $$PWD/xonlinetoolsoptionswidget.ui \
     $$PWD/xvirustotaldialog.ui \
     $$PWD/xvirustotalwidget.ui

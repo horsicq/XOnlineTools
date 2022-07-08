@@ -35,6 +35,7 @@ public:
         RTYPE_UPLOADFILE,
         RTYPE_GETFILEANALYSES,
         RTYPE_RESCANFILE,
+        RTYPE_GETUPLOADLINK
     };
 
     struct SCAN_RESULT

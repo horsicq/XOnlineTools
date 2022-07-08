@@ -13,4 +13,6 @@ set(XVIRUSTOTALWIDGET_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/xonlinetoolsoptionswidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xonlinetoolsoptionswidget.ui
     ${CMAKE_CURRENT_LIST_DIR}/xonlinetoolsdialogprocess.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dialogxvirustotal.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dialogxvirustotal.ui
 )

@@ -133,8 +133,8 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
 
     if(pJsonDoc->isObject())
     {
-        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toString();
-        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toString();
+        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
+        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
 
         result.dtFirstScan=XBinary::valueToTime(sFirstDate.toULongLong(),XBinary::DT_TYPE_POSIX);
         result.dtLastScan=XBinary::valueToTime(sLastDate.toULongLong(),XBinary::DT_TYPE_POSIX);
@@ -215,21 +215,42 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
     if(rtype==RTYPE_GETFILEINFO)
     {
         sUrlPath="/api/v3/files/"+sParameter;
+        url.setPath(sUrlPath);
     }
     else if(rtype==RTYPE_UPLOADFILE)
     {
-        sUrlPath="/api/v3/files";
+        if(pDevice->size()<32000000) // TODO fix 32 mb
+        {
+            sUrlPath="/api/v3/files";
+            url.setPath(sUrlPath);
+        }
+        else
+        {
+           QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_GETUPLOADLINK,""));
+
+           if(jsDoc.isObject())
+           {
+                QString sString=jsDoc.object()["data"].toVariant().toString();
+                url.setQuery(sString);
+                sUrlPath=sString.section(".com/",1,1);
+           }
+        }
     }
     else if(rtype==RTYPE_GETFILEANALYSES)
     {
         sUrlPath="/api/v3/analyses/"+sParameter;
+        url.setPath(sUrlPath);
     }
-    else if(rtype==RTYPE_GETFILEANALYSES)
+    else if(rtype==RTYPE_RESCANFILE)
     {
         sUrlPath="/api/v3/files/"+sParameter+"/analyse";
+        url.setPath(sUrlPath);
     }
-
-    url.setPath(sUrlPath);
+    else if(rtype==RTYPE_GETUPLOADLINK)
+    {
+        sUrlPath="/api/v3/files/upload_url";
+        url.setPath(sUrlPath);
+    }
 
     networkRequest.setUrl(url);
     networkRequest.setRawHeader("x-apikey",getApiKey().toLatin1());
@@ -238,40 +259,43 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
     QHttpMultiPart *pMultiPart=nullptr;
 
     if( (rtype==RTYPE_GETFILEINFO)||
-        (rtype==RTYPE_GETFILEANALYSES))
+        (rtype==RTYPE_GETFILEANALYSES)||
+        (rtype==RTYPE_GETUPLOADLINK))
     {
         pReply=pNetworkAccessManager->get(networkRequest);
     }
     else if(rtype==RTYPE_UPLOADFILE)
     {
-        // TODO files > 32 mb
-        pMultiPart=new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-        QHttpPart filePart;
-
-        QString sFileName=XBinary::getDeviceFileName(pDevice);
-
-        if(sFileName=="")
+        if(sUrlPath!="")
         {
-            if(sParameter!="")
+            pMultiPart=new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+            QHttpPart filePart;
+
+            QString sFileName=XBinary::getDeviceFileName(pDevice);
+
+            if(sFileName=="")
             {
-                sFileName=sParameter;
+                if(sParameter!="")
+                {
+                    sFileName=sParameter;
+                }
+                else
+                {
+                    // We use MD5
+                    sFileName=XBinary::getHash(XBinary::HASH_MD5,pDevice);
+                }
             }
-            else
-            {
-                // We use MD5
-                sFileName=XBinary::getHash(XBinary::HASH_MD5,pDevice);
-            }
+
+            filePart.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream");
+            filePart.setHeader(QNetworkRequest::ContentDispositionHeader,QVariant("form-data; name=\"file\"; filename=\"" + sFileName + "\""));
+
+            filePart.setBodyDevice(pDevice);
+
+            pMultiPart->append(filePart);
+
+            pReply=pNetworkAccessManager->post(networkRequest,pMultiPart);
         }
-
-        filePart.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream");
-        filePart.setHeader(QNetworkRequest::ContentDispositionHeader,QVariant("form-data; name=\"file\"; filename=\"" + sFileName + "\""));
-
-        filePart.setBodyDevice(pDevice);
-
-        pMultiPart->append(filePart);
-
-        pReply=pNetworkAccessManager->post(networkRequest,pMultiPart);
     }
 
     if(pReply)

@@ -49,6 +49,7 @@ public:
     void setData(QIODevice *pDevice);
     void reload(bool bRescan);
     void showRecords();
+    static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent=nullptr);
 
 protected:
     virtual void registerShortcuts(bool bState);
