@@ -232,7 +232,8 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
 
            if(jsDoc.isObject())
            {
-                QString sString=jsDoc.object()["data"].toVariant().toString();
+//                QString sString=jsDoc.object()["data"].toVariant().toString();
+                QString sString=jsDoc.object()["data"].toString();
                 url.setQuery(sString);
                 sUrlPath=sString.section(".com/",1,1);
            }
