@@ -28,6 +28,7 @@
 #include <QEventLoop>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonValueRef>
 #include <QJsonArray>
 #include <QHttpMultiPart>
 
