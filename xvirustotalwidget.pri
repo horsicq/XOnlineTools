@@ -26,6 +26,11 @@ SOURCES += \
     include($$PWD/../Formats/xformats.pri)
 }
 
+!contains(XCONFIG, xdialogprocess) {
+    XCONFIG += xdialogprocess
+    include($$PWD/../FormatDialogs/xdialogprocess.pri)
+}
+
 FORMS += \
     $$PWD/dialogxvirustotal.ui \
     $$PWD/xonlinetoolsoptionswidget.ui \
