@@ -133,8 +133,10 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
 
     if(pJsonDoc->isObject())
     {
-        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
-        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
+//        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
+//        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
+        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toString();
+        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toString();
 
         result.dtFirstScan=XBinary::valueToTime(sFirstDate.toULongLong(),XBinary::DT_TYPE_POSIX);
         result.dtLastScan=XBinary::valueToTime(sLastDate.toULongLong(),XBinary::DT_TYPE_POSIX);
