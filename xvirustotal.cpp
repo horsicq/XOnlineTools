@@ -135,11 +135,12 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
     {
 //        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
 //        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
-        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toString();
-        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toString();
 
-        result.dtFirstScan=XBinary::valueToTime(sFirstDate.toULongLong(),XBinary::DT_TYPE_POSIX);
-        result.dtLastScan=XBinary::valueToTime(sLastDate.toULongLong(),XBinary::DT_TYPE_POSIX);
+        qint32 nFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toInt();
+        qint32 nLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toInt();
+
+        result.dtFirstScan=XBinary::valueToTime(nFirstDate,XBinary::DT_TYPE_POSIX);
+        result.dtLastScan=XBinary::valueToTime(nLastDate,XBinary::DT_TYPE_POSIX);
     }
 
     return result;
