@@ -33,7 +33,7 @@ DialogXVirusTotal::~DialogXVirusTotal()
     delete ui;
 }
 
-void DialogXVirusTotal::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
+void DialogXVirusTotal::setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions)
 {
     ui->widget->setGlobal(pShortcuts,pXOptions);
 }

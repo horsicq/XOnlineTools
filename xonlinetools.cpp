@@ -79,6 +79,30 @@ QIODevice *XOnlineTools::getDevice()
     return g_pDevice;
 }
 
+bool XOnlineTools::isPagePresent(QString sUrl)
+{
+    bool bResult;
+
+    QNetworkAccessManager networkAccessManager;
+    QNetworkRequest networkRequest;
+    networkRequest.setUrl(QUrl(sUrl));
+    QNetworkReply *pReply=networkAccessManager.get(networkRequest);
+    QEventLoop loop;
+    QObject::connect(pReply,SIGNAL(finished()),&loop,SLOT(quit()));
+    loop.exec();
+
+    if(pReply->bytesAvailable())
+    {
+        bResult=true;
+    }
+    else
+    {
+        bResult=false;
+    }
+
+    return bResult;
+}
+
 bool XOnlineTools::_process()
 {
     return false;

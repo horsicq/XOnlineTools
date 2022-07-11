@@ -51,70 +51,85 @@ void XVirusTotalWidget::reload(bool bRescan)
 {
     g_mode=MODE_UNKNOWN;
 
-    g_jsonDocument=QJsonDocument();
+    QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    if(checkVirusTotalKey(getGlobalOptions(),XOptions::getMainWidget(this)))
+    if(sApiKey=="")
     {
-        XVirusTotal virusTotal;
-
-        QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
-
-        virusTotal.setApiKey(sApiKey);
-
-        bool bIsNotFound=false;
-
-        if(bRescan)
+        if(showInBrowser())
         {
-            XVirusTotal _virusTotal;
-            _virusTotal.setApiKey(sApiKey);
-            _virusTotal.setDevice(g_pDevice);
-            _virusTotal.setParameter(g_sMD5);
-            _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
-
-            XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
-
-            xotdp.showDialogDelay(1000);
-
-            g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
+            g_mode=MODE_NOAPIKEY;
         }
         else
         {
-            g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
-
-            if(bIsNotFound)
-            {
-                // TODO upload
-                if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file for analyze?"))==QMessageBox::Yes)
-                {
-                    XVirusTotal _virusTotal;
-                    _virusTotal.setApiKey(sApiKey);
-                    _virusTotal.setDevice(g_pDevice);
-                    _virusTotal.setParameter(g_sMD5);
-                    _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
-
-                    XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
-
-                    xotdp.showDialogDelay(1000);
-
-                    g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
-                }
-            }
-        }
-
-        if(!bIsNotFound)
-        {
-            g_mode=MODE_EXISTS;
-
-            showRecords();
-        }
-        else
-        {
-            g_mode=MODE_NOTFOUND;
+            g_mode=MODE_UNKNOWN;
         }
     }
-    else
+
+    if(g_mode!=MODE_NOAPIKEY)
     {
-        g_mode=MODE_NOAPIKEY;
+        if(checkVirusTotalKey(getGlobalOptions(),XOptions::getMainWidget(this)))
+        {
+            g_jsonDocument=QJsonDocument();
+
+            XVirusTotal virusTotal;
+
+            virusTotal.setApiKey(sApiKey);
+
+            bool bIsNotFound=false;
+
+            if(bRescan)
+            {
+                XVirusTotal _virusTotal;
+                _virusTotal.setApiKey(sApiKey);
+                _virusTotal.setDevice(g_pDevice);
+                _virusTotal.setParameter(g_sMD5);
+                _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+
+                XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
+
+                xotdp.showDialogDelay(1000);
+
+                g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
+            }
+            else
+            {
+                g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound);
+
+                if(bIsNotFound)
+                {
+                    // TODO upload
+                    if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file for analyze?"))==QMessageBox::Yes)
+                    {
+                        XVirusTotal _virusTotal;
+                        _virusTotal.setApiKey(sApiKey);
+                        _virusTotal.setDevice(g_pDevice);
+                        _virusTotal.setParameter(g_sMD5);
+                        _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+
+                        XOnlineToolsDialogProcess xotdp(this,&_virusTotal);
+
+                        xotdp.showDialogDelay(1000);
+
+                        g_jsonDocument=virusTotal.getFileInfo(g_sMD5,&bIsNotFound); // mb TODO
+                    }
+                }
+            }
+
+            if(!bIsNotFound)
+            {
+                g_mode=MODE_EXISTS;
+
+                showRecords();
+            }
+            else
+            {
+                g_mode=MODE_NOTFOUND;
+            }
+        }
+        else
+        {
+            g_mode=MODE_NOAPIKEY;
+        }
     }
 
     if(g_mode==MODE_EXISTS)
@@ -240,3 +255,25 @@ void XVirusTotalWidget::on_checkBoxShowDetects_stateChanged(int nValue)
     showRecords();
 }
 
+void XVirusTotalWidget::on_pushButtonWebsite_clicked()
+{
+    showInBrowser();
+}
+
+bool XVirusTotalWidget::showInBrowser()
+{
+    return showInBrowser(g_sMD5);
+}
+
+bool XVirusTotalWidget::showInBrowser(QString sHash)
+{
+    bool bResult=false;
+
+    if(XVirusTotal::isFilePresent(sHash))
+    {
+        QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
+        bResult=true;
+    }
+
+    return bResult;
+}

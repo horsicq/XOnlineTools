@@ -56,15 +56,17 @@ public:
 
     explicit XVirusTotal(QObject *pParent=nullptr);
 
-    QJsonDocument getFileInfo(QString sMD5,bool *pBNotFound=nullptr);
+    QJsonDocument getFileInfo(QString sHash,bool *pBNotFound=nullptr);
     QJsonDocument getFileAnalyses(QString sId);
     QString uploadFile(QIODevice *pDevice,QString sName="");
     QString uploadFile(QString sFileName);
-    QString rescanFile(QString sMD5);
-    QList<SCAN_RESULT> getScanResults(QString sMD5,bool bShowDetected);
+    QString rescanFile(QString sHash);
+    QList<SCAN_RESULT> getScanResults(QString sHash,bool bShowDetected);
     static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc,bool bShowDetected);
-    SCAN_INFO getScanInfo(QString sMD5);
+    SCAN_INFO getScanInfo(QString sHash);
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc);
+    static QString getFileLink(QString sHash);
+    static bool isFilePresent(QString sHash);
 
 protected:
     virtual bool _process();

@@ -27,6 +27,8 @@ XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) :
 {
     ui->setupUi(this);
 
+    ui->groupBoxVirusTotalApiKey->setTitle(QString("VirusTotal %1").arg(tr("API key")));
+
     g_pOptions=nullptr;
 
     setProperty("GROUPID",XOptions::GROUPID_ONLINETOOLS);

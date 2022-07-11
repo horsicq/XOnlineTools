@@ -58,6 +58,7 @@ public:
     MODE getMode();
     void setDevice(QIODevice *pDevice);
     QIODevice *getDevice();
+    static bool isPagePresent(QString sUrl);
 
 protected:
     virtual bool _process();

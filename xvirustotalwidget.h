@@ -50,6 +50,8 @@ public:
     void reload(bool bRescan);
     void showRecords();
     static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent=nullptr);
+    bool showInBrowser();
+    static bool showInBrowser(QString sHash);
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -59,6 +61,7 @@ private slots:
     void on_pushButtonSave_clicked();
     void on_pushButtonRescan_clicked();
     void on_checkBoxShowDetects_stateChanged(int nValue);
+    void on_pushButtonWebsite_clicked();
 
 private:
     Ui::XVirusTotalWidget *ui;

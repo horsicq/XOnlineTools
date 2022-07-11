@@ -26,9 +26,9 @@ XVirusTotal::XVirusTotal(QObject *pParent)
 
 }
 
-QJsonDocument XVirusTotal::getFileInfo(QString sMD5,bool *pBNotFound)
+QJsonDocument XVirusTotal::getFileInfo(QString sHash, bool *pBNotFound)
 {
-    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sMD5,nullptr,pBNotFound));
+    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sHash,nullptr,pBNotFound));
 }
 
 QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
@@ -67,11 +67,11 @@ QString XVirusTotal::uploadFile(QString sFileName)
     return sResult;
 }
 
-QString XVirusTotal::rescanFile(QString sMD5)
+QString XVirusTotal::rescanFile(QString sHash)
 {
     QString sResult;
 
-    QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_RESCANFILE,sMD5));
+    QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_RESCANFILE,sHash));
 
     if(jsDoc.isObject())
     {
@@ -81,9 +81,9 @@ QString XVirusTotal::rescanFile(QString sMD5)
     return sResult;
 }
 
-QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sMD5,bool bShowDetected)
+QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sHash,bool bShowDetected)
 {
-    QJsonDocument jsonDoc=getFileInfo(sMD5);
+    QJsonDocument jsonDoc=getFileInfo(sHash);
 
     return getScanResults(&jsonDoc,bShowDetected);
 }
@@ -144,6 +144,16 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
     }
 
     return result;
+}
+
+QString XVirusTotal::getFileLink(QString sHash)
+{
+    return QString("https://www.virustotal.com/gui/file/"+sHash);
+}
+
+bool XVirusTotal::isFilePresent(QString sHash)
+{
+    return isPagePresent(getFileLink(sHash));
 }
 
 bool XVirusTotal::_process()
