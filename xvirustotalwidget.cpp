@@ -219,7 +219,7 @@ bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
     {
         QString sInfo=tr("Please use valid API key");
 
-        sInfo+=tr("\n\n %1 -> %2 -> %3").arg(tr("Options"),tr("Online tools"),QString("VirusTotal API key"));
+        sInfo+=QString("\n\n %1 -> %2 -> %3").arg(tr("Options"),tr("Online tools"),QString("VirusTotal API key"));
 
         QMessageBox::critical(pParent,tr("Error"),sInfo);
     }
