@@ -9,7 +9,6 @@ HEADERS += \
     $$PWD/xonlinetoolsdialogprocess.h \
     $$PWD/xonlinetoolsoptionswidget.h \
     $$PWD/xvirustotal.h \
-    $$PWD/xvirustotaldialog.h \
     $$PWD/xvirustotalwidget.h
 
 SOURCES += \
@@ -18,7 +17,6 @@ SOURCES += \
     $$PWD/xonlinetoolsdialogprocess.cpp \
     $$PWD/xonlinetoolsoptionswidget.cpp \
     $$PWD/xvirustotal.cpp \
-    $$PWD/xvirustotaldialog.cpp \
     $$PWD/xvirustotalwidget.cpp
 
 !contains(XCONFIG, xformats) {
@@ -34,7 +32,6 @@ SOURCES += \
 FORMS += \
     $$PWD/dialogxvirustotal.ui \
     $$PWD/xonlinetoolsoptionswidget.ui \
-    $$PWD/xvirustotaldialog.ui \
     $$PWD/xvirustotalwidget.ui
 
 DISTFILES += \
