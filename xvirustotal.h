@@ -66,7 +66,7 @@ public:
     SCAN_INFO getScanInfo(QString sHash);
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc);
     static QString getFileLink(QString sHash);
-    static bool isFilePresent(QString sHash);
+    bool isFilePresent(QString sHash);
 
 protected:
     virtual bool _process();

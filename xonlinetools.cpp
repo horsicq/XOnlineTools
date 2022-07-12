@@ -85,6 +85,9 @@ bool XOnlineTools::isPagePresent(QString sUrl)
 
     QNetworkAccessManager networkAccessManager;
     QNetworkRequest networkRequest;
+
+    connect(&networkAccessManager,SIGNAL(sslErrors(QNetworkReply*,const QList<QSslError> &)),this,SLOT(handleSslErrors(QNetworkReply*,const QList<QSslError> &)));
+
     networkRequest.setUrl(QUrl(sUrl));
     QNetworkReply *pReply=networkAccessManager.get(networkRequest);
     QEventLoop loop;
@@ -101,6 +104,38 @@ bool XOnlineTools::isPagePresent(QString sUrl)
     }
 
     return bResult;
+}
+
+QString XOnlineTools::getPageContent(QString sUrl)
+{
+    QString sResult;
+
+    QNetworkAccessManager networkAccessManager;
+    QNetworkRequest networkRequest;
+
+    connect(&networkAccessManager,SIGNAL(sslErrors(QNetworkReply*,const QList<QSslError> &)),this,SLOT(handleSslErrors(QNetworkReply*,const QList<QSslError> &)));
+
+    networkRequest.setUrl(QUrl(sUrl));
+    QNetworkReply *pReply=networkAccessManager.get(networkRequest);
+    QEventLoop loop;
+    QObject::connect(pReply,SIGNAL(finished()),&loop,SLOT(quit()));
+    loop.exec();
+
+    if(pReply->bytesAvailable())
+    {
+        sResult=pReply->readAll();
+    }
+
+    return sResult;
+}
+
+QString XOnlineTools::getSslVersion()
+{
+    QString sResult;
+
+    sResult=QSslSocket::sslLibraryVersionString();
+
+    return sResult;
 }
 
 bool XOnlineTools::_process()
@@ -127,10 +162,10 @@ void XOnlineTools::process()
 
 void XOnlineTools::_uploadProgress(qint64 bytesSent,qint64 bytesTotal)
 {
-    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
-
     g_pPdStruct->pdRecord.nCurrent=bytesSent;
     g_pPdStruct->pdRecord.nTotal=bytesTotal;
+
+    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
     if(pReply)
     {
@@ -143,10 +178,10 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent,qint64 bytesTotal)
 
 void XOnlineTools::_downloadProgress(qint64 bytesReceived,qint64 bytesTotal)
 {
-    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
-
     g_pPdStruct->pdRecord.nCurrent=bytesReceived;
     g_pPdStruct->pdRecord.nTotal=bytesTotal;
+
+    QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
     if(pReply)
     {
@@ -167,3 +202,16 @@ void XOnlineTools::_finished()
     g_pPdStruct->pdRecord.bFinished=true;
 }
 
+void XOnlineTools::handleSslErrors(QNetworkReply *pReply,const QList<QSslError> &listErrors)
+{
+    Q_UNUSED(pReply)
+
+    QString sError;
+
+    if(listErrors.count())
+    {
+        sError=listErrors.at(0).errorString(); // The first error
+    }
+
+    emit errorMessage(QString("%1(%2)").arg(sError,XOnlineTools::getSslVersion()));
+}

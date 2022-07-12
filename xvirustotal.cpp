@@ -215,7 +215,9 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
 {
     QByteArray baResult;
 
-    QNetworkAccessManager *pNetworkAccessManager=new QNetworkAccessManager(this);
+    QNetworkAccessManager networkAccessManager;
+
+    connect(&networkAccessManager,SIGNAL(sslErrors(QNetworkReply*,const QList<QSslError> &)),this,SLOT(handleSslErrors(QNetworkReply*,const QList<QSslError> &)));
 
     QNetworkRequest networkRequest;
 
@@ -276,7 +278,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
         (rtype==RTYPE_GETFILEANALYSES)||
         (rtype==RTYPE_GETUPLOADLINK))
     {
-        pReply=pNetworkAccessManager->get(networkRequest);
+        pReply=networkAccessManager.get(networkRequest);
     }
     else if(rtype==RTYPE_UPLOADFILE)
     {
@@ -308,7 +310,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
 
             pMultiPart->append(filePart);
 
-            pReply=pNetworkAccessManager->post(networkRequest,pMultiPart);
+            pReply=networkAccessManager.post(networkRequest,pMultiPart);
         }
     }
 
@@ -347,8 +349,6 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
         #endif
         }
     }
-
-    delete pNetworkAccessManager;
 
     if(pMultiPart)
     {

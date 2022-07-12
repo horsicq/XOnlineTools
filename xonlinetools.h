@@ -58,7 +58,10 @@ public:
     MODE getMode();
     void setDevice(QIODevice *pDevice);
     QIODevice *getDevice();
-    static bool isPagePresent(QString sUrl);
+    bool isPagePresent(QString sUrl);
+    QString getPageContent(QString sUrl);
+
+    static QString getSslVersion();
 
 protected:
     virtual bool _process();
@@ -68,6 +71,9 @@ public slots:
     void _uploadProgress(qint64 bytesSent,qint64 bytesTotal);
     void _downloadProgress(qint64 bytesReceived,qint64 bytesTotal);
     void _finished();
+
+private slots:
+    void handleSslErrors(QNetworkReply *pReply,const QList<QSslError> &listErrors);
 
 signals:
     void errorMessage(QString sErrorMessage);

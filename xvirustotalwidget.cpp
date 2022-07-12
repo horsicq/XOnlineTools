@@ -53,15 +53,18 @@ void XVirusTotalWidget::reload(bool bRescan)
 
     QString sApiKey=getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    if(sApiKey=="")
+    if(!bRescan)
     {
-        if(showInBrowser())
+        if(sApiKey=="")
         {
-            g_mode=MODE_NOAPIKEY;
-        }
-        else
-        {
-            g_mode=MODE_UNKNOWN;
+            if(showInBrowser())
+            {
+                g_mode=MODE_NOAPIKEY;
+            }
+            else
+            {
+                g_mode=MODE_UNKNOWN;
+            }
         }
     }
 
@@ -72,6 +75,8 @@ void XVirusTotalWidget::reload(bool bRescan)
             g_jsonDocument=QJsonDocument();
 
             XVirusTotal virusTotal;
+
+            connect(&virusTotal,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
 
             virusTotal.setApiKey(sApiKey);
 
@@ -101,6 +106,9 @@ void XVirusTotalWidget::reload(bool bRescan)
                     if(QMessageBox::question(XOptions::getMainWidget(this),tr("Information"),tr("Upload the file for analyze?"))==QMessageBox::Yes)
                     {
                         XVirusTotal _virusTotal;
+
+                        connect(&_virusTotal,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
+
                         _virusTotal.setApiKey(sApiKey);
                         _virusTotal.setDevice(g_pDevice);
                         _virusTotal.setParameter(g_sMD5);
@@ -132,14 +140,14 @@ void XVirusTotalWidget::reload(bool bRescan)
         }
     }
 
-    if(g_mode==MODE_EXISTS)
-    {
-        ui->pushButtonRescan->setEnabled(true);
-    }
-    else
-    {
-        ui->pushButtonRescan->setEnabled(false);
-    }
+//    if(g_mode==MODE_EXISTS)
+//    {
+//        ui->pushButtonRescan->setEnabled(true);
+//    }
+//    else
+//    {
+//        ui->pushButtonRescan->setEnabled(false);
+//    }
 }
 
 void XVirusTotalWidget::showRecords()
@@ -269,11 +277,7 @@ bool XVirusTotalWidget::showInBrowser(QString sHash)
 {
     bool bResult=false;
 
-    if(XVirusTotal::isFilePresent(sHash))
-    {
-        QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
-        bResult=true;
-    }
+    bResult=QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
 
     return bResult;
 }
