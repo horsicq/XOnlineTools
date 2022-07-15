@@ -212,7 +212,7 @@ void XVirusTotalWidget::showRecords()
     }
 }
 
-bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
+bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions,QWidget *pParent)
 {
     bool bResult=false;
 
