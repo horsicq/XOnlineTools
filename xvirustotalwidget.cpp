@@ -138,6 +138,12 @@ void XVirusTotalWidget::reload(bool bRescan)
         {
             g_mode=MODE_NOAPIKEY;
         }
+
+        ui->pushButtonSave->setEnabled(true);
+    }
+    else
+    {
+        ui->pushButtonSave->setEnabled(false);
     }
 
 //    if(g_mode==MODE_EXISTS)
