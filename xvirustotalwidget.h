@@ -49,7 +49,7 @@ public:
     void setData(QIODevice *pDevice);
     void reload(bool bRescan);
     void showRecords();
-    static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent=nullptr);
+    static bool checkVirusTotalKey(XOptions *pOptions,QWidget *pParent=nullptr);
     bool showInBrowser();
     static bool showInBrowser(QString sHash);
 
