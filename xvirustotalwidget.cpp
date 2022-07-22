@@ -194,7 +194,7 @@ void XVirusTotalWidget::showRecords()
 
     ui->tableViewScanResult->setModel(pModel);
 
-    delete pOldModel;
+    deleteOldAbstractModel(&pOldModel);
 
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Interactive);
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Interactive);
