@@ -22,9 +22,9 @@
 #define XVIRUSTOTALWIDGET_H
 
 #include <QStandardItemModel>
+#include "xonlinetoolsdialogprocess.h"
 #include "xshortcutswidget.h"
 #include "xvirustotal.h"
-#include "xonlinetoolsdialogprocess.h"
 
 namespace Ui {
 class XVirusTotalWidget;
