@@ -26,9 +26,9 @@ XVirusTotal::XVirusTotal(QObject *pParent)
 
 }
 
-QJsonDocument XVirusTotal::getFileInfo(QString sHash,bool *pBNotFound)
+QJsonDocument XVirusTotal::getFileInfo(QString sHash, bool *pbIsNotFound)
 {
-    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sHash,nullptr,pBNotFound));
+    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO,sHash,nullptr,pbIsNotFound));
 }
 
 QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
@@ -211,7 +211,7 @@ bool XVirusTotal::_process()
     return bResult;
 }
 
-QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice,bool *pBNotFound)
+QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pbIsNotFound)
 {
     QByteArray baResult;
 
@@ -329,16 +329,16 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype,QString sParameter,QIODevice *pD
         {
             baResult=pReply->readAll();
 
-            if(pBNotFound)
+            if(pbIsNotFound)
             {
-                *pBNotFound=false;
+                *pbIsNotFound=false;
             }
         }
         else if(pReply->error()==QNetworkReply::ContentNotFoundError)
         {
-            if(pBNotFound)
+            if(pbIsNotFound)
             {
-                *pBNotFound=true;
+                *pbIsNotFound=true;
             }
         }
         else

@@ -56,7 +56,7 @@ public:
 
     explicit XVirusTotal(QObject *pParent=nullptr);
 
-    QJsonDocument getFileInfo(QString sHash,bool *pBNotFound=nullptr);
+    QJsonDocument getFileInfo(QString sHash,bool *pbIsNotFound=nullptr);
     QJsonDocument getFileAnalyses(QString sId);
     QString uploadFile(QIODevice *pDevice,QString sName="");
     QString uploadFile(QString sFileName);
@@ -72,7 +72,7 @@ protected:
     virtual bool _process();
 
 private:
-    QByteArray sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice=nullptr,bool *pBNotFound=nullptr);
+    QByteArray sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice=nullptr,bool *pbIsNotFound=nullptr);
 };
 
 #endif // XVIRUSTOTAL_H
