@@ -19,6 +19,11 @@ SOURCES += \
     $$PWD/xvirustotal.cpp \
     $$PWD/xvirustotalwidget.cpp
 
+FORMS += \
+    $$PWD/dialogxvirustotal.ui \
+    $$PWD/xonlinetoolsoptionswidget.ui \
+    $$PWD/xvirustotalwidget.ui
+
 !contains(XCONFIG, xformats) {
     XCONFIG += xformats
     include($$PWD/../Formats/xformats.pri)
@@ -29,10 +34,7 @@ SOURCES += \
     include($$PWD/../FormatDialogs/xdialogprocess.pri)
 }
 
-FORMS += \
-    $$PWD/dialogxvirustotal.ui \
-    $$PWD/xonlinetoolsoptionswidget.ui \
-    $$PWD/xvirustotalwidget.ui
-
 DISTFILES += \
+    $$PWD/LICENSE \
+    $$PWD/README.md \
     $$PWD/xvirustotalwidget.cmake
