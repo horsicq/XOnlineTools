@@ -22,15 +22,15 @@
 #define XONLINETOOLS_H
 
 #include "xbinary.h"
-#include <QUrl>
+#include <QEventLoop>
+#include <QHttpMultiPart>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValueRef>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QEventLoop>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonValueRef>
-#include <QJsonArray>
-#include <QHttpMultiPart>
+#include <QUrl>
 
 class XOnlineTools : public QObject
 {
