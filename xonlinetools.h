@@ -82,7 +82,7 @@ signals:
 private:
     QString g_sApiKey;
     XBinary::PDSTRUCT *g_pPdStruct;
-    XBinary::PDSTRUCT pdStructEmpty;
+    XBinary::PDSTRUCT g_pdStructEmpty;
     MODE g_mode;
     QIODevice *g_pDevice;
     QString g_sParameter;

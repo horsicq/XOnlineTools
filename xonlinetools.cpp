@@ -23,8 +23,8 @@
 XOnlineTools::XOnlineTools(QObject *pParent)
     : QObject(pParent)
 {
-    pdStructEmpty={};
-    g_pPdStruct=&pdStructEmpty;
+    g_pdStructEmpty={};
+    g_pPdStruct=&g_pdStructEmpty;
     g_mode=MODE_UNKNOWN;
     g_pDevice=nullptr;
 }
