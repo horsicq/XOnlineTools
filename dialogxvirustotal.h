@@ -33,7 +33,7 @@ class DialogXVirusTotal : public XShortcutsDialog
     Q_OBJECT
 
 public:
-    explicit DialogXVirusTotal(QWidget *pParent = nullptr);
+    explicit DialogXVirusTotal(QWidget *pParent=nullptr);
     ~DialogXVirusTotal();
 
     virtual void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
