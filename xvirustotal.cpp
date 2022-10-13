@@ -141,6 +141,8 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
 
         result.dtFirstScan=XBinary::valueToTime(nFirstDate,XBinary::DT_TYPE_POSIX);
         result.dtLastScan=XBinary::valueToTime(nLastDate,XBinary::DT_TYPE_POSIX);
+
+        // mb TODO XX/YY results
     }
 
     return result;
