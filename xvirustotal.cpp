@@ -165,7 +165,8 @@ bool XVirusTotal::_process()
     QElapsedTimer scanTimer;
     scanTimer.start();
 
-    getPdStruct()->pdRecordOpt.bIsValid=true;
+    qint32 _nFreeIndex=XBinary::getFreeIndex(getPdStruct());
+    XBinary::setPdStructInit(getPdStruct(),_nFreeIndex,0);
 
     if((getMode()==MODE_UPLOAD)||(getMode()==MODE_RESCAN))
     {
@@ -186,27 +187,26 @@ bool XVirusTotal::_process()
             {
                 QJsonDocument jsDoc=QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES,sId));
 
+                QString sStatus;
+
                 if(jsDoc.isObject())
                 {
-                    getPdStruct()->pdRecordOpt.sStatus=jsDoc.object()["data"].toObject()["attributes"].toObject()["status"].toString();
+                    sStatus=jsDoc.object()["data"].toObject()["attributes"].toObject()["status"].toString();
                 }
 
-                if((getPdStruct()->pdRecordOpt.sStatus=="")||(getPdStruct()->pdRecordOpt.sStatus=="completed"))
+                if((sStatus=="")||(sStatus=="completed"))
                 {
                     break;
                 }
+
+                XBinary::setPdStructStatus(getPdStruct(),_nFreeIndex,sStatus);
 
                 QThread::msleep(1000);
             }
         }
     }
 
-    if(!(getPdStruct()->bIsStop))
-    {
-        getPdStruct()->pdRecordOpt.bSuccess=true;
-    }
-
-    getPdStruct()->pdRecordOpt.bFinished=true;
+    XBinary::setPdStructFinished(getPdStruct(),_nFreeIndex);
 
     emit completed(scanTimer.elapsed());
 

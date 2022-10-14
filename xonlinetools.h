@@ -86,6 +86,7 @@ private:
     MODE g_mode;
     QIODevice *g_pDevice;
     QString g_sParameter;
+    qint32 g_nFreeIndex;
 };
 
 #endif // XONLINETOOLS_H

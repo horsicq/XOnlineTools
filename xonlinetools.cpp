@@ -27,6 +27,7 @@ XOnlineTools::XOnlineTools(QObject *pParent)
     g_pPdStruct=&g_pdStructEmpty;
     g_mode=MODE_UNKNOWN;
     g_pDevice=nullptr;
+    g_nFreeIndex=-1;
 }
 
 void XOnlineTools::setApiKey(QString sApiKey)
@@ -148,22 +149,31 @@ void XOnlineTools::process()
     QElapsedTimer scanTimer;
     scanTimer.start();
 
-    getPdStruct()->pdRecordOpt.bIsValid=true;
+//    getPdStruct()->pdRecordOpt.bIsValid=true;
 
-    if(!(getPdStruct()->bIsStop))
-    {
-        getPdStruct()->pdRecordOpt.bSuccess=_process();
-    }
+//    if(!(getPdStruct()->bIsStop))
+//    {
+//        getPdStruct()->pdRecordOpt.bSuccess=_process();
+//    }
 
-    getPdStruct()->pdRecordOpt.bFinished=true;
+//    getPdStruct()->pdRecordOpt.bFinished=true;
+
+    g_nFreeIndex=XBinary::getFreeIndex(g_pPdStruct);
+    XBinary::setPdStructInit(g_pPdStruct,g_nFreeIndex,0);
+
+    bool bResult=_process();
+
+    g_pPdStruct->bIsStop=!(bResult);
+
+    XBinary::setPdStructFinished(g_pPdStruct,g_nFreeIndex);
 
     emit completed(scanTimer.elapsed());
 }
 
 void XOnlineTools::_uploadProgress(qint64 bytesSent,qint64 bytesTotal)
 {
-    g_pPdStruct->pdRecord.nCurrent=bytesSent;
-    g_pPdStruct->pdRecord.nTotal=bytesTotal;
+    XBinary::setPdStructCurrent(g_pPdStruct,g_nFreeIndex,bytesSent);
+    XBinary::setPdStructTotal(g_pPdStruct,g_nFreeIndex,bytesTotal);
 
     QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
@@ -178,8 +188,8 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent,qint64 bytesTotal)
 
 void XOnlineTools::_downloadProgress(qint64 bytesReceived,qint64 bytesTotal)
 {
-    g_pPdStruct->pdRecord.nCurrent=bytesReceived;
-    g_pPdStruct->pdRecord.nTotal=bytesTotal;
+    XBinary::setPdStructCurrent(g_pPdStruct,g_nFreeIndex,bytesReceived);
+    XBinary::setPdStructTotal(g_pPdStruct,g_nFreeIndex,bytesTotal);
 
     QNetworkReply *pReply=qobject_cast<QNetworkReply *>(sender());
 
@@ -194,12 +204,7 @@ void XOnlineTools::_downloadProgress(qint64 bytesReceived,qint64 bytesTotal)
 
 void XOnlineTools::_finished()
 {
-    if(!(g_pPdStruct->bIsStop))
-    {
-        g_pPdStruct->pdRecord.bSuccess=true;
-    }
-
-    g_pPdStruct->pdRecord.bFinished=true;
+    XBinary::setPdStructFinished(g_pPdStruct,g_nFreeIndex);
 }
 
 void XOnlineTools::handleSslErrors(QNetworkReply *pReply,const QList<QSslError> &listErrors)
