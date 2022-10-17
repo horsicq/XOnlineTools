@@ -81,53 +81,14 @@ QString XVirusTotal::rescanFile(QString sHash)
     return sResult;
 }
 
-QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QString sHash,bool bShowDetected)
-{
-    QJsonDocument jsonDoc=getFileInfo(sHash);
-
-    return getScanResults(&jsonDoc,bShowDetected);
-}
-
-QList<XVirusTotal::SCAN_RESULT> XVirusTotal::getScanResults(QJsonDocument *pJsonDoc,bool bShowDetected)
-{
-    QList<SCAN_RESULT> listResult;
-
-    if(pJsonDoc->isObject())
-    {
-        QJsonObject jsonObject=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_results"].toObject();
-
-        QStringList slList=jsonObject.keys();
-        qint32 nCount=slList.count();
-
-        for(qint32 i=0;i<nCount;i++)
-        {
-            SCAN_RESULT record={};
-
-            record.category=jsonObject[slList.at(i)].toObject()["category"].toString();
-            record.engine_name=jsonObject[slList.at(i)].toObject()["engine_name"].toString();
-            record.engine_version=jsonObject[slList.at(i)].toObject()["engine_version"].toString();
-            record.result=jsonObject[slList.at(i)].toObject()["result"].toString();
-            record.method=jsonObject[slList.at(i)].toObject()["method"].toString();
-            record.engine_update=jsonObject[slList.at(i)].toObject()["engine_update"].toString();
-
-            if((!bShowDetected)||(bShowDetected&&(record.result!="")))
-            {
-                listResult.append(record);
-            }
-        }
-    }
-
-    return listResult;
-}
-
-XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5)
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5,bool bShowDetected)
 {
     QJsonDocument jsonDoc=getFileInfo(sMD5);
 
-    return getScanInfo(&jsonDoc);
+    return getScanInfo(&jsonDoc,bShowDetected);
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc,bool bShowDetected)
 {
     SCAN_INFO result={};
 
@@ -143,6 +104,29 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc)
         result.dtLastScan=XBinary::valueToTime(nLastDate,XBinary::DT_TYPE_POSIX);
 
         // mb TODO XX/YY results
+
+        QJsonObject jsonObject=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_results"].toObject();
+
+        QStringList slList=jsonObject.keys();
+        qint32 nCount=slList.count();
+
+        for(qint32 i=0;i<nCount;i++)
+        {
+            SCAN_RESULT record={};
+
+            record.result=jsonObject[slList.at(i)].toObject()["result"].toString();
+
+            if((!bShowDetected)||(bShowDetected&&(record.result!="")))
+            {
+                record.category=jsonObject[slList.at(i)].toObject()["category"].toString();
+                record.engine_name=jsonObject[slList.at(i)].toObject()["engine_name"].toString();
+                record.engine_version=jsonObject[slList.at(i)].toObject()["engine_version"].toString();
+                record.method=jsonObject[slList.at(i)].toObject()["method"].toString();
+                record.engine_update=jsonObject[slList.at(i)].toObject()["engine_update"].toString();
+
+                result.listScanResult.append(record);
+            }
+        }
     }
 
     return result;

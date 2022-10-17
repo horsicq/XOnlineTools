@@ -160,13 +160,13 @@ void XVirusTotalWidget::showRecords()
 {
     bool bShowDetected=ui->checkBoxShowDetects->isChecked();
 
-    QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanResults(&g_jsonDocument,bShowDetected);
+    QList<XVirusTotal::SCAN_RESULT> listRecords=XVirusTotal::getScanInfo(&g_jsonDocument,bShowDetected).listScanResult;
 
     QAbstractItemModel *pOldModel=ui->tableViewScanResult->model();
 
     qint32 nNumberOfRecords=listRecords.count();
 
-    QStandardItemModel *pModel=new QStandardItemModel(nNumberOfRecords,4,this);
+    QStandardItemModel *pModel=new QStandardItemModel(nNumberOfRecords,4);
 
     pModel->setHeaderData(0,Qt::Horizontal,tr("Scan"));
     pModel->setHeaderData(1,Qt::Horizontal,tr("Version"));
@@ -205,7 +205,7 @@ void XVirusTotalWidget::showRecords()
     ui->tableViewScanResult->setColumnWidth(1,100);
     ui->tableViewScanResult->setColumnWidth(2,100);
 
-    XVirusTotal::SCAN_INFO scanInfo=XVirusTotal::getScanInfo(&g_jsonDocument);
+    XVirusTotal::SCAN_INFO scanInfo=XVirusTotal::getScanInfo(&g_jsonDocument,false);
 
     if(scanInfo.dtFirstScan.isValid())
     {

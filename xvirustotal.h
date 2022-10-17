@@ -52,6 +52,7 @@ public:
     {
         QDateTime dtFirstScan;
         QDateTime dtLastScan;
+        QList<SCAN_RESULT> listScanResult;
     };
 
     explicit XVirusTotal(QObject *pParent=nullptr);
@@ -61,10 +62,8 @@ public:
     QString uploadFile(QIODevice *pDevice,QString sName="");
     QString uploadFile(QString sFileName);
     QString rescanFile(QString sHash);
-    QList<SCAN_RESULT> getScanResults(QString sHash,bool bShowDetected);
-    static QList<SCAN_RESULT> getScanResults(QJsonDocument *pJsonDoc,bool bShowDetected);
-    SCAN_INFO getScanInfo(QString sHash);
-    static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc);
+    SCAN_INFO getScanInfo(QString sHash,bool bShowDetected);
+    static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc,bool bShowDetected);
     static QString getFileLink(QString sHash);
     bool isFilePresent(QString sHash);
 
