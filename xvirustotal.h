@@ -50,8 +50,10 @@ public:
 
     struct SCAN_INFO
     {
+        bool bIsValid;
         QDateTime dtFirstScan;
         QDateTime dtLastScan;
+        QString sStatus;
         QList<SCAN_RESULT> listScanResult;
     };
 
@@ -66,6 +68,7 @@ public:
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc,bool bShowDetected);
     static QString getFileLink(QString sHash);
     bool isFilePresent(QString sHash);
+    static SCAN_INFO getFileScanInfo(QString sFileName,QString sApiKey,bool bShowDetected);
 
 protected:
     virtual bool _process();

@@ -94,6 +94,7 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc,bool bSh
 
     if(pJsonDoc->isObject())
     {
+        result.bIsValid=true;
 //        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
 //        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
 
@@ -103,7 +104,7 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc,bool bSh
         result.dtFirstScan=XBinary::valueToTime(nFirstDate,XBinary::DT_TYPE_POSIX);
         result.dtLastScan=XBinary::valueToTime(nLastDate,XBinary::DT_TYPE_POSIX);
 
-        // mb TODO XX/YY results
+        qint32 nNumberOfDetects=0;
 
         QJsonObject jsonObject=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_results"].toObject();
 
@@ -115,8 +116,9 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc,bool bSh
             SCAN_RESULT record={};
 
             record.result=jsonObject[slList.at(i)].toObject()["result"].toString();
+            bool bDetected=(record.result!="");
 
-            if((!bShowDetected)||(bShowDetected&&(record.result!="")))
+            if((!bShowDetected)||(bShowDetected&&bDetected))
             {
                 record.category=jsonObject[slList.at(i)].toObject()["category"].toString();
                 record.engine_name=jsonObject[slList.at(i)].toObject()["engine_name"].toString();
@@ -126,7 +128,14 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc,bool bSh
 
                 result.listScanResult.append(record);
             }
+
+            if(bDetected)
+            {
+                nNumberOfDetects++;
+            }
         }
+
+        result.sStatus=QString("%1/%2").arg(QString::number(nNumberOfDetects),QString::number(nCount));
     }
 
     return result;
@@ -140,6 +149,16 @@ QString XVirusTotal::getFileLink(QString sHash)
 bool XVirusTotal::isFilePresent(QString sHash)
 {
     return isPagePresent(getFileLink(sHash));
+}
+
+XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(QString sFileName,QString sApiKey,bool bShowDetected)
+{
+    QString sHash=XBinary::getHash(XBinary::HASH_MD5,sFileName);
+
+    XVirusTotal virusTotal;
+    virusTotal.setApiKey(sApiKey);
+
+    return virusTotal.getScanInfo(sHash,bShowDetected);
 }
 
 bool XVirusTotal::_process()
