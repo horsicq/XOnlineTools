@@ -27,9 +27,8 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) :
 {
     ui->setupUi(this);
 
-    g_mode=MODE_UNKNOWN;
-
     g_pDevice=nullptr;
+    g_mode=MODE_UNKNOWN;
 }
 
 XVirusTotalWidget::~XVirusTotalWidget()
