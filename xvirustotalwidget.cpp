@@ -200,7 +200,7 @@ void XVirusTotalWidget::showRecords()
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Interactive);
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
 
-    ui->tableViewScanResult->setColumnWidth(0,150);
+    ui->tableViewScanResult->setColumnWidth(0,150); // TODO consts
     ui->tableViewScanResult->setColumnWidth(1,100);
     ui->tableViewScanResult->setColumnWidth(2,100);
 
