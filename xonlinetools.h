@@ -59,7 +59,6 @@ public:
     QIODevice *getDevice();
     bool isPagePresent(QString sUrl);
     QString getPageContent(QString sUrl);
-
     static QString getSslVersion();
 
 protected:
