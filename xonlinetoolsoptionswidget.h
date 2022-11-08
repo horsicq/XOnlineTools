@@ -37,7 +37,6 @@ public:
     ~XOnlineToolsOptionsWidget();
 
     void setOptions(XOptions *pOptions);
-
     static void setDefaultValues(XOptions *pOptions);
 
 public slots:
