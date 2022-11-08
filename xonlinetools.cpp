@@ -117,6 +117,7 @@ QString XOnlineTools::getPageContent(QString sUrl)
     connect(&networkAccessManager,SIGNAL(sslErrors(QNetworkReply*,const QList<QSslError> &)),this,SLOT(handleSslErrors(QNetworkReply*,const QList<QSslError> &)));
 
     networkRequest.setUrl(QUrl(sUrl));
+
     QNetworkReply *pReply=networkAccessManager.get(networkRequest);
     QEventLoop loop;
     QObject::connect(pReply,SIGNAL(finished()),&loop,SLOT(quit()));
