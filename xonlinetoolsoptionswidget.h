@@ -24,6 +24,7 @@
 #include <QWidget>
 #include "xoptions.h"
 
+// TODO XShortcutsWidget
 namespace Ui {
 class XOnlineToolsOptionsWidget;
 }
