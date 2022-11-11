@@ -19,50 +19,42 @@
  * SOFTWARE.
  */
 #include "xonlinetoolsoptionswidget.h"
+
 #include "ui_xonlinetoolsoptionswidget.h"
 
-XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) :
-    QWidget(pParent),
-    ui(new Ui::XOnlineToolsOptionsWidget)
-{
+XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XOnlineToolsOptionsWidget) {
     ui->setupUi(this);
 
     ui->groupBoxVirusTotalApiKey->setTitle(QString("VirusTotal %1").arg(tr("API key")));
 
-    g_pOptions=nullptr;
+    g_pOptions = nullptr;
 
-    setProperty("GROUPID",XOptions::GROUPID_ONLINETOOLS);
+    setProperty("GROUPID", XOptions::GROUPID_ONLINETOOLS);
 }
 
-XOnlineToolsOptionsWidget::~XOnlineToolsOptionsWidget()
-{
+XOnlineToolsOptionsWidget::~XOnlineToolsOptionsWidget() {
     delete ui;
 }
 
-void XOnlineToolsOptionsWidget::setOptions(XOptions *pOptions)
-{
-    g_pOptions=pOptions;
+void XOnlineToolsOptionsWidget::setOptions(XOptions *pOptions) {
+    g_pOptions = pOptions;
 
     reload();
 }
 
-void XOnlineToolsOptionsWidget::setDefaultValues(XOptions *pOptions)
-{
-    pOptions->addID(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY,"");
+void XOnlineToolsOptionsWidget::setDefaultValues(XOptions *pOptions) {
+    pOptions->addID(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY, "");
 }
 
-void XOnlineToolsOptionsWidget::save()
-{
-    g_pOptions->getLineEdit(ui->lineEditVirusTotalApiKey,XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY);
+void XOnlineToolsOptionsWidget::save() {
+    g_pOptions->getLineEdit(ui->lineEditVirusTotalApiKey, XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY);
 }
 
-void XOnlineToolsOptionsWidget::reload()
-{
-    g_pOptions->setLineEdit(ui->lineEditVirusTotalApiKey,XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY);
+void XOnlineToolsOptionsWidget::reload() {
+    g_pOptions->setLineEdit(ui->lineEditVirusTotalApiKey, XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY);
 }
 
-void XOnlineToolsOptionsWidget::on_pushButtonGetVirusTotalApiKey_clicked()
-{
-    QString sLink="https://www.virustotal.com/gui/my-apikey";
+void XOnlineToolsOptionsWidget::on_pushButtonGetVirusTotalApiKey_clicked() {
+    QString sLink = "https://www.virustotal.com/gui/my-apikey";
     QDesktopServices::openUrl(QUrl(sLink));
 }

@@ -22,6 +22,7 @@
 #define XONLINETOOLSOPTIONSWIDGET_H
 
 #include <QWidget>
+
 #include "xoptions.h"
 
 // TODO XShortcutsWidget
@@ -29,12 +30,11 @@ namespace Ui {
 class XOnlineToolsOptionsWidget;
 }
 
-class XOnlineToolsOptionsWidget : public QWidget
-{
+class XOnlineToolsOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit XOnlineToolsOptionsWidget(QWidget *pParent=nullptr);
+    explicit XOnlineToolsOptionsWidget(QWidget *pParent = nullptr);
     ~XOnlineToolsOptionsWidget();
 
     void setOptions(XOptions *pOptions);
@@ -52,4 +52,4 @@ private:
     XOptions *g_pOptions;
 };
 
-#endif // XONLINETOOLSOPTIONSWIDGET_H
+#endif  // XONLINETOOLSOPTIONSWIDGET_H

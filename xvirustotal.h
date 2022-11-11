@@ -21,16 +21,15 @@
 #ifndef XVIRUSTOTAL_H
 #define XVIRUSTOTAL_H
 
-#include "xonlinetools.h"
 #include <QThread>
 
-class XVirusTotal : public XOnlineTools
-{
+#include "xonlinetools.h"
+
+class XVirusTotal : public XOnlineTools {
     Q_OBJECT
 public:
-    enum RTYPE
-    {
-        RTYPE_UNKNOWN=0,
+    enum RTYPE {
+        RTYPE_UNKNOWN = 0,
         RTYPE_GETFILEINFO,
         RTYPE_UPLOADFILE,
         RTYPE_GETFILEANALYSES,
@@ -38,8 +37,7 @@ public:
         RTYPE_GETUPLOADLINK
     };
 
-    struct SCAN_RESULT
-    {
+    struct SCAN_RESULT {
         QString category;
         QString engine_name;
         QString engine_version;
@@ -48,8 +46,7 @@ public:
         QString engine_update;
     };
 
-    struct SCAN_INFO
-    {
+    struct SCAN_INFO {
         bool bIsValid;
         QDateTime dtFirstScan;
         QDateTime dtLastScan;
@@ -57,24 +54,24 @@ public:
         QList<SCAN_RESULT> listScanResult;
     };
 
-    explicit XVirusTotal(QObject *pParent=nullptr);
+    explicit XVirusTotal(QObject *pParent = nullptr);
 
-    QJsonDocument getFileInfo(QString sHash,bool *pbIsNotFound=nullptr);
+    QJsonDocument getFileInfo(QString sHash, bool *pbIsNotFound = nullptr);
     QJsonDocument getFileAnalyses(QString sId);
-    QString uploadFile(QIODevice *pDevice,QString sName="");
+    QString uploadFile(QIODevice *pDevice, QString sName = "");
     QString uploadFile(QString sFileName);
     QString rescanFile(QString sHash);
-    SCAN_INFO getScanInfo(QString sHash,bool bShowDetected);
-    static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc,bool bShowDetected);
+    SCAN_INFO getScanInfo(QString sHash, bool bShowDetected);
+    static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected);
     static QString getFileLink(QString sHash);
     bool isFilePresent(QString sHash);
-    static SCAN_INFO getFileScanInfo(QString sFileName,QString sApiKey,bool bShowDetected);
+    static SCAN_INFO getFileScanInfo(QString sFileName, QString sApiKey, bool bShowDetected);
 
 protected:
     virtual bool _process();
 
 private:
-    QByteArray sendRequest(RTYPE rtype,QString sParameter,QIODevice *pDevice=nullptr,bool *pbIsNotFound=nullptr);
+    QByteArray sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice = nullptr, bool *pbIsNotFound = nullptr);
 };
 
-#endif // XVIRUSTOTAL_H
+#endif  // XVIRUSTOTAL_H

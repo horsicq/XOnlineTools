@@ -22,6 +22,7 @@
 #define XVIRUSTOTALWIDGET_H
 
 #include <QStandardItemModel>
+
 #include "xonlinetoolsdialogprocess.h"
 #include "xshortcutswidget.h"
 #include "xvirustotal.h"
@@ -30,26 +31,24 @@ namespace Ui {
 class XVirusTotalWidget;
 }
 
-class XVirusTotalWidget : public XShortcutsWidget
-{
+class XVirusTotalWidget : public XShortcutsWidget {
     Q_OBJECT
 
-    enum MODE
-    {
-        MODE_UNKNOWN=0,
+    enum MODE {
+        MODE_UNKNOWN = 0,
         MODE_NOAPIKEY,
         MODE_NOTFOUND,
         MODE_EXISTS
     };
 
 public:
-    explicit XVirusTotalWidget(QWidget *pParent=nullptr);
+    explicit XVirusTotalWidget(QWidget *pParent = nullptr);
     ~XVirusTotalWidget();
 
     void setData(QIODevice *pDevice);
     void reload(bool bRescan);
     void showRecords();
-    static bool checkVirusTotalKey(XOptions *pOptions,QWidget *pParent=nullptr);
+    static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent = nullptr);
     bool showInBrowser();
     static bool showInBrowser(QString sHash);
 
@@ -71,4 +70,4 @@ private:
     QJsonDocument g_jsonDocument;
 };
 
-#endif // XVIRUSTOTALWIDGET_H
+#endif  // XVIRUSTOTALWIDGET_H

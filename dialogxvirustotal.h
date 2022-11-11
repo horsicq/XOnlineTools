@@ -28,15 +28,14 @@ namespace Ui {
 class DialogXVirusTotal;
 }
 
-class DialogXVirusTotal : public XShortcutsDialog
-{
+class DialogXVirusTotal : public XShortcutsDialog {
     Q_OBJECT
 
 public:
-    explicit DialogXVirusTotal(QWidget *pParent=nullptr);
+    explicit DialogXVirusTotal(QWidget *pParent = nullptr);
     ~DialogXVirusTotal();
 
-    virtual void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
+    virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     void setData(QIODevice *pDevice);
 
 private slots:
@@ -46,4 +45,4 @@ private:
     Ui::DialogXVirusTotal *ui;
 };
 
-#endif // DIALOGXVIRUSTOTAL_H
+#endif  // DIALOGXVIRUSTOTAL_H

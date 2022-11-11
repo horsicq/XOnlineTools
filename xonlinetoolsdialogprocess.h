@@ -24,12 +24,11 @@
 #include "xdialogprocess.h"
 #include "xonlinetools.h"
 
-class XOnlineToolsDialogProcess : public XDialogProcess
-{
+class XOnlineToolsDialogProcess : public XDialogProcess {
     Q_OBJECT
 
 public:
-    explicit XOnlineToolsDialogProcess(QWidget *pParent,XOnlineTools *pOnlineTools);
+    explicit XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools);
     ~XOnlineToolsDialogProcess();
 
 private:
@@ -37,4 +36,4 @@ private:
     QThread *g_pThread;
 };
 
-#endif // XONLINETOOLSDIALOGPROCESS_H
+#endif  // XONLINETOOLSDIALOGPROCESS_H

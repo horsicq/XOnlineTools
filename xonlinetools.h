@@ -21,7 +21,6 @@
 #ifndef XONLINETOOLS_H
 #define XONLINETOOLS_H
 
-#include "xbinary.h"
 #include <QEventLoop>
 #include <QHttpMultiPart>
 #include <QJsonArray>
@@ -32,20 +31,20 @@
 #include <QNetworkReply>
 #include <QUrl>
 
-class XOnlineTools : public QObject
-{
+#include "xbinary.h"
+
+class XOnlineTools : public QObject {
     Q_OBJECT
 
 public:
-    enum MODE
-    {
-        MODE_UNKNOWN=0,
+    enum MODE {
+        MODE_UNKNOWN = 0,
         MODE_DOWNLOAD,
         MODE_UPLOAD,
         MODE_RESCAN
     };
 
-    explicit XOnlineTools(QObject *pParent=nullptr);
+    explicit XOnlineTools(QObject *pParent = nullptr);
 
     void setApiKey(QString sApiKey);
     QString getApiKey();
@@ -66,12 +65,12 @@ protected:
 
 public slots:
     void process();
-    void _uploadProgress(qint64 bytesSent,qint64 bytesTotal);
-    void _downloadProgress(qint64 bytesReceived,qint64 bytesTotal);
+    void _uploadProgress(qint64 bytesSent, qint64 bytesTotal);
+    void _downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void _finished();
 
 private slots:
-    void handleSslErrors(QNetworkReply *pReply,const QList<QSslError> &listErrors);
+    void handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors);
 
 signals:
     void errorMessage(QString sErrorMessage);
@@ -87,4 +86,4 @@ private:
     qint32 g_nFreeIndex;
 };
 
-#endif // XONLINETOOLS_H
+#endif  // XONLINETOOLS_H

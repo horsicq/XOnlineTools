@@ -19,31 +19,25 @@
  * SOFTWARE.
  */
 #include "dialogxvirustotal.h"
+
 #include "ui_dialogxvirustotal.h"
 
-DialogXVirusTotal::DialogXVirusTotal(QWidget *pParent) :
-    XShortcutsDialog(pParent),
-    ui(new Ui::DialogXVirusTotal)
-{
+DialogXVirusTotal::DialogXVirusTotal(QWidget *pParent) : XShortcutsDialog(pParent), ui(new Ui::DialogXVirusTotal) {
     ui->setupUi(this);
 }
 
-DialogXVirusTotal::~DialogXVirusTotal()
-{
+DialogXVirusTotal::~DialogXVirusTotal() {
     delete ui;
 }
 
-void DialogXVirusTotal::setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions)
-{
-    ui->widget->setGlobal(pShortcuts,pXOptions);
+void DialogXVirusTotal::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions) {
+    ui->widget->setGlobal(pShortcuts, pXOptions);
 }
 
-void DialogXVirusTotal::setData(QIODevice *pDevice)
-{
+void DialogXVirusTotal::setData(QIODevice *pDevice) {
     ui->widget->setData(pDevice);
 }
 
-void DialogXVirusTotal::on_pushButtonClose_clicked()
-{
+void DialogXVirusTotal::on_pushButtonClose_clicked() {
     this->close();
 }
