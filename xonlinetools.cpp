@@ -98,8 +98,7 @@ QString XOnlineTools::getPageContent(QString sUrl) {
     QNetworkAccessManager networkAccessManager;
     QNetworkRequest networkRequest;
 
-    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this,
-            SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));
+    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this, SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));
 
     networkRequest.setUrl(QUrl(sUrl));
 

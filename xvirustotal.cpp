@@ -192,8 +192,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
 
     QNetworkAccessManager networkAccessManager;
 
-    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this,
-            SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));
+    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this, SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));
 
     QNetworkRequest networkRequest;
 
