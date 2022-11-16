@@ -20,7 +20,8 @@
  */
 #include "xonlinetools.h"
 
-XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent) {
+XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
+{
     g_pdStructEmpty = {};
     g_pPdStruct = &g_pdStructEmpty;
     g_mode = MODE_UNKNOWN;
@@ -28,47 +29,58 @@ XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent) {
     g_nFreeIndex = -1;
 }
 
-void XOnlineTools::setApiKey(QString sApiKey) {
+void XOnlineTools::setApiKey(QString sApiKey)
+{
     g_sApiKey = sApiKey;
 }
 
-QString XOnlineTools::getApiKey() {
+QString XOnlineTools::getApiKey()
+{
     return g_sApiKey;
 }
 
-void XOnlineTools::setPdStruct(XBinary::PDSTRUCT *pPdStruct) {
+void XOnlineTools::setPdStruct(XBinary::PDSTRUCT *pPdStruct)
+{
     g_pPdStruct = pPdStruct;
 }
 
-XBinary::PDSTRUCT *XOnlineTools::getPdStruct() {
+XBinary::PDSTRUCT *XOnlineTools::getPdStruct()
+{
     return g_pPdStruct;
 }
 
-void XOnlineTools::setParameter(QString sParameter) {
+void XOnlineTools::setParameter(QString sParameter)
+{
     g_sParameter = sParameter;
 }
 
-QString XOnlineTools::getParameter() {
+QString XOnlineTools::getParameter()
+{
     return g_sParameter;
 }
 
-void XOnlineTools::setMode(MODE mode) {
+void XOnlineTools::setMode(MODE mode)
+{
     g_mode = mode;
 }
 
-XOnlineTools::MODE XOnlineTools::getMode() {
+XOnlineTools::MODE XOnlineTools::getMode()
+{
     return g_mode;
 }
 
-void XOnlineTools::setDevice(QIODevice *pDevice) {
+void XOnlineTools::setDevice(QIODevice *pDevice)
+{
     g_pDevice = pDevice;
 }
 
-QIODevice *XOnlineTools::getDevice() {
+QIODevice *XOnlineTools::getDevice()
+{
     return g_pDevice;
 }
 
-bool XOnlineTools::isPagePresent(QString sUrl) {
+bool XOnlineTools::isPagePresent(QString sUrl)
+{
     bool bResult;
 
     QNetworkAccessManager networkAccessManager;
@@ -92,7 +104,8 @@ bool XOnlineTools::isPagePresent(QString sUrl) {
     return bResult;
 }
 
-QString XOnlineTools::getPageContent(QString sUrl) {
+QString XOnlineTools::getPageContent(QString sUrl)
+{
     QString sResult;
 
     QNetworkAccessManager networkAccessManager;
@@ -114,7 +127,8 @@ QString XOnlineTools::getPageContent(QString sUrl) {
     return sResult;
 }
 
-QString XOnlineTools::getSslVersion() {
+QString XOnlineTools::getSslVersion()
+{
     QString sResult;
 
     sResult = QSslSocket::sslLibraryVersionString();
@@ -122,11 +136,13 @@ QString XOnlineTools::getSslVersion() {
     return sResult;
 }
 
-bool XOnlineTools::_process() {
+bool XOnlineTools::_process()
+{
     return false;
 }
 
-void XOnlineTools::process() {
+void XOnlineTools::process()
+{
     QElapsedTimer scanTimer;
     scanTimer.start();
 
@@ -151,7 +167,8 @@ void XOnlineTools::process() {
     emit completed(scanTimer.elapsed());
 }
 
-void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal) {
+void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+{
     XBinary::setPdStructCurrent(g_pPdStruct, g_nFreeIndex, bytesSent);
     XBinary::setPdStructTotal(g_pPdStruct, g_nFreeIndex, bytesTotal);
 
@@ -164,7 +181,8 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal) {
     }
 }
 
-void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
     XBinary::setPdStructCurrent(g_pPdStruct, g_nFreeIndex, bytesReceived);
     XBinary::setPdStructTotal(g_pPdStruct, g_nFreeIndex, bytesTotal);
 
@@ -177,11 +195,13 @@ void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
     }
 }
 
-void XOnlineTools::_finished() {
+void XOnlineTools::_finished()
+{
     XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);
 }
 
-void XOnlineTools::handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors) {
+void XOnlineTools::handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors)
+{
     Q_UNUSED(pReply)
 
     QString sError;

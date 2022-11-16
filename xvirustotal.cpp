@@ -20,18 +20,22 @@
  */
 #include "xvirustotal.h"
 
-XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent) {
+XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent)
+{
 }
 
-QJsonDocument XVirusTotal::getFileInfo(QString sHash, bool *pbIsNotFound) {
+QJsonDocument XVirusTotal::getFileInfo(QString sHash, bool *pbIsNotFound)
+{
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO, sHash, nullptr, pbIsNotFound));
 }
 
-QJsonDocument XVirusTotal::getFileAnalyses(QString sId) {
+QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
+{
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES, sId));
 }
 
-QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName) {
+QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
+{
     QString sResult;
 
     QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_UPLOADFILE, sName, pDevice));
@@ -43,7 +47,8 @@ QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName) {
     return sResult;
 }
 
-QString XVirusTotal::uploadFile(QString sFileName) {
+QString XVirusTotal::uploadFile(QString sFileName)
+{
     QString sResult;
 
     QFile file;
@@ -58,7 +63,8 @@ QString XVirusTotal::uploadFile(QString sFileName) {
     return sResult;
 }
 
-QString XVirusTotal::rescanFile(QString sHash) {
+QString XVirusTotal::rescanFile(QString sHash)
+{
     QString sResult;
 
     QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_RESCANFILE, sHash));
@@ -70,13 +76,15 @@ QString XVirusTotal::rescanFile(QString sHash) {
     return sResult;
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5, bool bShowDetected) {
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5, bool bShowDetected)
+{
     QJsonDocument jsonDoc = getFileInfo(sMD5);
 
     return getScanInfo(&jsonDoc, bShowDetected);
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected) {
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected)
+{
     SCAN_INFO result = {};
 
     if (pJsonDoc->isObject()) {
@@ -124,15 +132,18 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bS
     return result;
 }
 
-QString XVirusTotal::getFileLink(QString sHash) {
+QString XVirusTotal::getFileLink(QString sHash)
+{
     return QString("https://www.virustotal.com/gui/file/" + sHash);
 }
 
-bool XVirusTotal::isFilePresent(QString sHash) {
+bool XVirusTotal::isFilePresent(QString sHash)
+{
     return isPagePresent(getFileLink(sHash));
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(QString sFileName, QString sApiKey, bool bShowDetected) {
+XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(QString sFileName, QString sApiKey, bool bShowDetected)
+{
     QString sHash = XBinary::getHash(XBinary::HASH_MD5, sFileName);
 
     XVirusTotal virusTotal;
@@ -141,7 +152,8 @@ XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(QString sFileName, QString s
     return virusTotal.getScanInfo(sHash, bShowDetected);
 }
 
-bool XVirusTotal::_process() {
+bool XVirusTotal::_process()
+{
     bool bResult = false;
 
     QElapsedTimer scanTimer;
@@ -187,7 +199,8 @@ bool XVirusTotal::_process() {
     return bResult;
 }
 
-QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pbIsNotFound) {
+QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice, bool *pbIsNotFound)
+{
     QByteArray baResult;
 
     QNetworkAccessManager networkAccessManager;

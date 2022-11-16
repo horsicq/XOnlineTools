@@ -20,7 +20,8 @@
  */
 #include "xonlinetoolsdialogprocess.h"
 
-XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools) : XDialogProcess(pParent) {
+XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools) : XDialogProcess(pParent)
+{
     g_pOnlineTools = pOnlineTools;
 
     pOnlineTools->setPdStruct(getPdStruct());
@@ -36,7 +37,8 @@ XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTo
     g_pThread->start();
 }
 
-XOnlineToolsDialogProcess::~XOnlineToolsDialogProcess() {
+XOnlineToolsDialogProcess::~XOnlineToolsDialogProcess()
+{
     stop();
     waitForFinished();
 

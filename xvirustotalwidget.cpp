@@ -22,18 +22,21 @@
 
 #include "ui_xvirustotalwidget.h"
 
-XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParent), ui(new Ui::XVirusTotalWidget) {
+XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParent), ui(new Ui::XVirusTotalWidget)
+{
     ui->setupUi(this);
 
     g_pDevice = nullptr;
     g_mode = MODE_UNKNOWN;
 }
 
-XVirusTotalWidget::~XVirusTotalWidget() {
+XVirusTotalWidget::~XVirusTotalWidget()
+{
     delete ui;
 }
 
-void XVirusTotalWidget::setData(QIODevice *pDevice) {
+void XVirusTotalWidget::setData(QIODevice *pDevice)
+{
     // TODO Check API key
     g_pDevice = pDevice;
 
@@ -42,7 +45,8 @@ void XVirusTotalWidget::setData(QIODevice *pDevice) {
     reload(false);
 }
 
-void XVirusTotalWidget::reload(bool bRescan) {
+void XVirusTotalWidget::reload(bool bRescan)
+{
     g_mode = MODE_UNKNOWN;
 
     QString sApiKey = getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
@@ -131,7 +135,8 @@ void XVirusTotalWidget::reload(bool bRescan) {
     //    }
 }
 
-void XVirusTotalWidget::showRecords() {
+void XVirusTotalWidget::showRecords()
+{
     bool bShowDetected = ui->checkBoxShowDetects->isChecked();
 
     QList<XVirusTotal::SCAN_RESULT> listRecords = XVirusTotal::getScanInfo(&g_jsonDocument, bShowDetected).listScanResult;
@@ -189,7 +194,8 @@ void XVirusTotalWidget::showRecords() {
     }
 }
 
-bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent) {
+bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
+{
     bool bResult = false;
 
     QString sApiKey = pOptions->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
@@ -209,38 +215,46 @@ bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
     return bResult;
 }
 
-void XVirusTotalWidget::registerShortcuts(bool bState) {
+void XVirusTotalWidget::registerShortcuts(bool bState)
+{
     Q_UNUSED(bState)
     // TODO
 }
 
-void XVirusTotalWidget::on_pushButtonReload_clicked() {
+void XVirusTotalWidget::on_pushButtonReload_clicked()
+{
     reload(false);
 }
 
-void XVirusTotalWidget::on_pushButtonSave_clicked() {
+void XVirusTotalWidget::on_pushButtonSave_clicked()
+{
     XShortcutsWidget::saveModel(ui->tableViewScanResult->model(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
 }
 
-void XVirusTotalWidget::on_pushButtonRescan_clicked() {
+void XVirusTotalWidget::on_pushButtonRescan_clicked()
+{
     reload(true);
 }
 
-void XVirusTotalWidget::on_checkBoxShowDetects_stateChanged(int nValue) {
+void XVirusTotalWidget::on_checkBoxShowDetects_stateChanged(int nValue)
+{
     Q_UNUSED(nValue)
 
     showRecords();
 }
 
-void XVirusTotalWidget::on_pushButtonWebsite_clicked() {
+void XVirusTotalWidget::on_pushButtonWebsite_clicked()
+{
     showInBrowser();
 }
 
-bool XVirusTotalWidget::showInBrowser() {
+bool XVirusTotalWidget::showInBrowser()
+{
     return showInBrowser(g_sMD5);
 }
 
-bool XVirusTotalWidget::showInBrowser(QString sHash) {
+bool XVirusTotalWidget::showInBrowser(QString sHash)
+{
     bool bResult = false;
 
     bResult = QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
