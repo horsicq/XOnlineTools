@@ -20,7 +20,8 @@
  */
 #include "xonlinetools.h"
 
-XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
+XOnlineTools::XOnlineTools(QObject *pParent)
+    : QObject(pParent)
 {
     g_pdStructEmpty = {};
     g_pPdStruct = &g_pdStructEmpty;

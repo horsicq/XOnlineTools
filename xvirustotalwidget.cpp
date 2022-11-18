@@ -22,7 +22,8 @@
 
 #include "ui_xvirustotalwidget.h"
 
-XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParent), ui(new Ui::XVirusTotalWidget)
+XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent)
+    : XShortcutsWidget(pParent), ui(new Ui::XVirusTotalWidget)
 {
     ui->setupUi(this);
 

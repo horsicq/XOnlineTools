@@ -22,7 +22,8 @@
 
 #include "ui_dialogxvirustotal.h"
 
-DialogXVirusTotal::DialogXVirusTotal(QWidget *pParent) : XShortcutsDialog(pParent), ui(new Ui::DialogXVirusTotal)
+DialogXVirusTotal::DialogXVirusTotal(QWidget *pParent)
+    : XShortcutsDialog(pParent), ui(new Ui::DialogXVirusTotal)
 {
     ui->setupUi(this);
 }

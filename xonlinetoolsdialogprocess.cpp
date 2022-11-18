@@ -20,7 +20,8 @@
  */
 #include "xonlinetoolsdialogprocess.h"
 
-XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools) : XDialogProcess(pParent)
+XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTools *pOnlineTools)
+    : XDialogProcess(pParent)
 {
     g_pOnlineTools = pOnlineTools;
 

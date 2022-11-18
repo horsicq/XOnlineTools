@@ -20,7 +20,8 @@
  */
 #include "xvirustotal.h"
 
-XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent)
+XVirusTotal::XVirusTotal(QObject *pParent)
+    : XOnlineTools(pParent)
 {
 }
 
