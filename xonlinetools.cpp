@@ -20,8 +20,7 @@
  */
 #include "xonlinetools.h"
 
-XOnlineTools::XOnlineTools(QObject *pParent)
-    : QObject(pParent)
+XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
 {
     g_pdStructEmpty = {};
     g_pPdStruct = &g_pdStructEmpty;
@@ -87,8 +86,7 @@ bool XOnlineTools::isPagePresent(QString sUrl)
     QNetworkAccessManager networkAccessManager;
     QNetworkRequest networkRequest;
 
-    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this,
-            SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));  // TODO Check connect
+    connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this, SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));  // TODO Check connect
 
     networkRequest.setUrl(QUrl(sUrl));
     QNetworkReply *pReply = networkAccessManager.get(networkRequest);

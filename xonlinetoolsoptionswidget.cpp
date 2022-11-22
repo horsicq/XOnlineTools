@@ -22,8 +22,7 @@
 
 #include "ui_xonlinetoolsoptionswidget.h"
 
-XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent)
-    : QWidget(pParent), ui(new Ui::XOnlineToolsOptionsWidget)
+XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XOnlineToolsOptionsWidget)
 {
     ui->setupUi(this);
 

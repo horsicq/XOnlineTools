@@ -20,8 +20,7 @@
  */
 #include "xvirustotal.h"
 
-XVirusTotal::XVirusTotal(QObject *pParent)
-    : XOnlineTools(pParent)
+XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent)
 {
 }
 
@@ -314,7 +313,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, QString sParameter, QIODevice *
     }
 
 #ifdef QT_DEBUG
-    qDebug(baResult.data());
+    qDebug("%s", baResult.data());
 #endif
 
     return baResult;
