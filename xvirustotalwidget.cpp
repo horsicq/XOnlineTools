@@ -228,7 +228,7 @@ void XVirusTotalWidget::on_pushButtonReload_clicked()
 
 void XVirusTotalWidget::on_pushButtonSave_clicked()
 {
-    XShortcutsWidget::saveModel(ui->tableViewScanResult->model(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
+    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->model(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
 }
 
 void XVirusTotalWidget::on_pushButtonRescan_clicked()
