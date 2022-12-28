@@ -23,6 +23,7 @@
 XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
 {
     g_pdStructEmpty = {};
+    XBinary::_pdStructInit(&g_pdStructEmpty);
     g_pPdStruct = &g_pdStructEmpty;
     g_mode = MODE_UNKNOWN;
     g_pDevice = nullptr;
