@@ -89,8 +89,6 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bS
 
     if (pJsonDoc->isObject()) {
         result.bIsValid = true;
-        //        QString sFirstDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toVariant().toString();
-        //        QString sLastDate=pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toVariant().toString();
 
         qint32 nFirstDate = pJsonDoc->object()["data"].toObject()["attributes"].toObject()["first_submission_date"].toInt();
         qint32 nLastDate = pJsonDoc->object()["data"].toObject()["attributes"].toObject()["last_analysis_date"].toInt();
