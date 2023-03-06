@@ -82,7 +82,7 @@ void XVirusTotalWidget::reload(bool bRescan)
 
                 XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
 
-                xotdp.showDialogDelay(1000);
+                xotdp.showDialogDelay();
 
                 g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
             } else {
@@ -102,7 +102,7 @@ void XVirusTotalWidget::reload(bool bRescan)
 
                         XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
 
-                        xotdp.showDialogDelay(1000);
+                        xotdp.showDialogDelay();
 
                         g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
                     }
