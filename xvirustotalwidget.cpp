@@ -255,9 +255,5 @@ bool XVirusTotalWidget::showInBrowser()
 
 bool XVirusTotalWidget::showInBrowser(QString sHash)
 {
-    bool bResult = false;
-
-    bResult = QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
-
-    return bResult;
+    return QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
 }
