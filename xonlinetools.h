@@ -46,7 +46,7 @@ public:
 
     explicit XOnlineTools(QObject *pParent = nullptr);
 
-    void setApiKey(QString sApiKey);
+    void setApiKey(const QString &sApiKey);
     QString getApiKey();
     void setPdStruct(XBinary::PDSTRUCT *pPdStruct);
     XBinary::PDSTRUCT *getPdStruct();

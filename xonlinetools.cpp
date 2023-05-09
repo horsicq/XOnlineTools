@@ -29,7 +29,7 @@ XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
     g_nFreeIndex = -1;
 }
 
-void XOnlineTools::setApiKey(QString sApiKey)
+void XOnlineTools::setApiKey(const QString &sApiKey)
 {
     g_sApiKey = sApiKey;
 }
