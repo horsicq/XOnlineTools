@@ -49,7 +49,7 @@ XBinary::PDSTRUCT *XOnlineTools::getPdStruct()
     return g_pPdStruct;
 }
 
-void XOnlineTools::setParameter(QString sParameter)
+void XOnlineTools::setParameter(const QString &sParameter)
 {
     g_sParameter = sParameter;
 }

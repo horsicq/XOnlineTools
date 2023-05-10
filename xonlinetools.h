@@ -50,7 +50,7 @@ public:
     QString getApiKey();
     void setPdStruct(XBinary::PDSTRUCT *pPdStruct);
     XBinary::PDSTRUCT *getPdStruct();
-    void setParameter(QString sParameter);
+    void setParameter(const QString &sParameter);
     QString getParameter();
     void setMode(MODE mode);
     MODE getMode();
