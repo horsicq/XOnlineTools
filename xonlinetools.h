@@ -56,7 +56,7 @@ public:
     MODE getMode();
     void setDevice(QIODevice *pDevice);
     QIODevice *getDevice();
-    bool isPagePresent(QString sUrl);
+    bool isPagePresent(const QString &sUrl);
     QString getPageContent(QString sUrl);
     static QString getSslVersion();
 

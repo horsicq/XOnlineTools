@@ -79,7 +79,7 @@ QIODevice *XOnlineTools::getDevice()
     return g_pDevice;
 }
 
-bool XOnlineTools::isPagePresent(QString sUrl)
+bool XOnlineTools::isPagePresent(const QString &sUrl)
 {
     bool bResult;
 
