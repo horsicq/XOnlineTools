@@ -104,7 +104,7 @@ bool XOnlineTools::isPagePresent(const QString &sUrl)
     return bResult;
 }
 
-QString XOnlineTools::getPageContent(QString sUrl)
+QString XOnlineTools::getPageContent(const QString &sUrl)
 {
     QString sResult;
 
