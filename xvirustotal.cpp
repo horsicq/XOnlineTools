@@ -24,7 +24,7 @@ XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent)
 {
 }
 
-QJsonDocument XVirusTotal::getFileInfo(QString sHash, bool *pbIsNotFound)
+QJsonDocument XVirusTotal::getFileInfo(const QString &sHash, bool *pbIsNotFound)
 {
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO, sHash, nullptr, pbIsNotFound));
 }
