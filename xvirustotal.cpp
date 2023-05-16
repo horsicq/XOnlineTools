@@ -29,7 +29,7 @@ QJsonDocument XVirusTotal::getFileInfo(const QString &sHash, bool *pbIsNotFound)
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO, sHash, nullptr, pbIsNotFound));
 }
 
-QJsonDocument XVirusTotal::getFileAnalyses(QString sId)
+QJsonDocument XVirusTotal::getFileAnalyses(const QString &sId)
 {
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES, sId));
 }

@@ -57,7 +57,7 @@ public:
     explicit XVirusTotal(QObject *pParent = nullptr);
 
     QJsonDocument getFileInfo(const QString &sHash, bool *pbIsNotFound = nullptr);
-    QJsonDocument getFileAnalyses(QString sId);
+    QJsonDocument getFileAnalyses(const QString &sId);
     QString uploadFile(QIODevice *pDevice, QString sName = "");
     QString uploadFile(QString sFileName);
     QString rescanFile(QString sHash);
