@@ -58,7 +58,7 @@ public:
 
     QJsonDocument getFileInfo(const QString &sHash, bool *pbIsNotFound = nullptr);
     QJsonDocument getFileAnalyses(const QString &sId);
-    QString uploadFile(QIODevice *pDevice, QString sName = "");
+    QString uploadFile(QIODevice *pDevice, const QString &sName = "");
     QString uploadFile(QString sFileName);
     QString rescanFile(QString sHash);
     SCAN_INFO getScanInfo(QString sHash, bool bShowDetected);

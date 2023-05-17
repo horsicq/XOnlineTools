@@ -34,7 +34,7 @@ QJsonDocument XVirusTotal::getFileAnalyses(const QString &sId)
     return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES, sId));
 }
 
-QString XVirusTotal::uploadFile(QIODevice *pDevice, QString sName)
+QString XVirusTotal::uploadFile(QIODevice *pDevice, const QString &sName)
 {
     QString sResult;
 
