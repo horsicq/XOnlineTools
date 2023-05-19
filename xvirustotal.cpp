@@ -47,7 +47,7 @@ QString XVirusTotal::uploadFile(QIODevice *pDevice, const QString &sName)
     return sResult;
 }
 
-QString XVirusTotal::uploadFile(QString sFileName)
+QString XVirusTotal::uploadFile(const QString &sFileName)
 {
     QString sResult;
 
