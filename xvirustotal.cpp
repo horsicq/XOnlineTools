@@ -63,7 +63,7 @@ QString XVirusTotal::uploadFile(const QString &sFileName)
     return sResult;
 }
 
-QString XVirusTotal::rescanFile(QString sHash)
+QString XVirusTotal::rescanFile(const QString &sHash)
 {
     QString sResult;
 
