@@ -61,7 +61,7 @@ public:
     QString uploadFile(QIODevice *pDevice, const QString &sName = "");
     QString uploadFile(const QString &sFileName);
     QString rescanFile(const QString &sHash);
-    SCAN_INFO getScanInfo(QString sHash, bool bShowDetected);
+    SCAN_INFO getScanInfo(const QString &sHash, bool bShowDetected);
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected);
     static QString getFileLink(QString sHash);
     bool isFilePresent(QString sHash);

@@ -76,9 +76,9 @@ QString XVirusTotal::rescanFile(const QString &sHash)
     return sResult;
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QString sMD5, bool bShowDetected)
+XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(const QString &sHash, bool bShowDetected)
 {
-    QJsonDocument jsonDoc = getFileInfo(sMD5);
+    QJsonDocument jsonDoc = getFileInfo(sHash);
 
     return getScanInfo(&jsonDoc, bShowDetected);
 }
