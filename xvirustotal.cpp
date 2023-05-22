@@ -130,7 +130,7 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bS
     return result;
 }
 
-QString XVirusTotal::getFileLink(QString sHash)
+QString XVirusTotal::getFileLink(const QString &sHash)
 {
     return QString("https://www.virustotal.com/gui/file/" + sHash);
 }

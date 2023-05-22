@@ -63,7 +63,7 @@ public:
     QString rescanFile(const QString &sHash);
     SCAN_INFO getScanInfo(const QString &sHash, bool bShowDetected);
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected);
-    static QString getFileLink(QString sHash);
+    static QString getFileLink(const QString &sHash);
     bool isFilePresent(QString sHash);
     static SCAN_INFO getFileScanInfo(QString sFileName, QString sApiKey, bool bShowDetected);
 
