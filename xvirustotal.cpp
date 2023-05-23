@@ -135,7 +135,7 @@ QString XVirusTotal::getFileLink(const QString &sHash)
     return QString("https://www.virustotal.com/gui/file/" + sHash);
 }
 
-bool XVirusTotal::isFilePresent(QString sHash)
+bool XVirusTotal::isFilePresent(const QString &sHash)
 {
     return isPagePresent(getFileLink(sHash));
 }
