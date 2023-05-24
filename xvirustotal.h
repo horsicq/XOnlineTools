@@ -65,7 +65,7 @@ public:
     static SCAN_INFO getScanInfo(QJsonDocument *pJsonDoc, bool bShowDetected);
     static QString getFileLink(const QString &sHash);
     bool isFilePresent(const QString &sHash);
-    static SCAN_INFO getFileScanInfo(QString sFileName, QString sApiKey, bool bShowDetected);
+    static SCAN_INFO getFileScanInfo(const QString &sFileName, QString sApiKey, bool bShowDetected);
 
 protected:
     virtual bool _process();
