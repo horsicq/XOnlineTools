@@ -140,7 +140,7 @@ bool XVirusTotal::isFilePresent(const QString &sHash)
     return isPagePresent(getFileLink(sHash));
 }
 
-XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(const QString &sFileName, QString sApiKey, bool bShowDetected)
+XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(const QString &sFileName, const QString &sApiKey, bool bShowDetected)
 {
     QString sHash = XBinary::getHash(XBinary::HASH_MD5, sFileName);
 
