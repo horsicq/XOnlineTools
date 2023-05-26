@@ -71,7 +71,7 @@ protected:
     virtual bool _process();
 
 private:
-    QByteArray sendRequest(RTYPE rtype, QString sParameter, QIODevice *pDevice = nullptr, bool *pbIsNotFound = nullptr);
+    QByteArray sendRequest(RTYPE rtype, const QString sParameter, QIODevice *pDevice = nullptr, bool *pbIsNotFound = nullptr);
 };
 
 #endif  // XVIRUSTOTAL_H
