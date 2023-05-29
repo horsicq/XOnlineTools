@@ -253,7 +253,7 @@ bool XVirusTotalWidget::showInBrowser()
     return showInBrowser(g_sMD5);
 }
 
-bool XVirusTotalWidget::showInBrowser(QString sHash)
+bool XVirusTotalWidget::showInBrowser(const QString &sHash)
 {
     return QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
 }

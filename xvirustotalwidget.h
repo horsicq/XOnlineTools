@@ -50,7 +50,7 @@ public:
     void showRecords();
     static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent = nullptr);
     bool showInBrowser();
-    static bool showInBrowser(QString sHash);
+    static bool showInBrowser(const QString &sHash);
 
 protected:
     virtual void registerShortcuts(bool bState);
