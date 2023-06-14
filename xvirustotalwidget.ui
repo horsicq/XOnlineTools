@@ -32,16 +32,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButtonRescan">
+      <widget class="QPushButton" name="pushButtonWebsite">
        <property name="text">
-        <string>Rescan</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBoxShowDetects">
-       <property name="text">
-        <string>Show detects</string>
+        <string>Website</string>
        </property>
       </widget>
      </item>
@@ -59,9 +52,16 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonWebsite">
+      <widget class="QPushButton" name="pushButtonRescan">
        <property name="text">
-        <string>Website</string>
+        <string>Rescan</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxShowDetects">
+       <property name="text">
+        <string>Show detects</string>
        </property>
       </widget>
      </item>

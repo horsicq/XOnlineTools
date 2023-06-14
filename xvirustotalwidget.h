@@ -46,7 +46,7 @@ public:
     ~XVirusTotalWidget();
 
     void setData(QIODevice *pDevice);
-    void reload(bool bRescan);
+    void reload(bool bRescanFile);
     void showRecords();
     static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent = nullptr);
     bool showInBrowser();

@@ -45,79 +45,69 @@ void XVirusTotalWidget::setData(QIODevice *pDevice)
     reload(false);
 }
 
-void XVirusTotalWidget::reload(bool bRescan)
+void XVirusTotalWidget::reload(bool bRescanFile)
 {
     g_mode = MODE_UNKNOWN;
 
     QString sApiKey = getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    if (!bRescan) {
-        if (sApiKey == "") {
-            if (showInBrowser()) {
-                g_mode = MODE_NOAPIKEY;
-            } else {
-                g_mode = MODE_UNKNOWN;
-            }
-        }
+    if (sApiKey == "") {
+        g_mode = MODE_NOAPIKEY;
     }
 
     if (g_mode != MODE_NOAPIKEY) {
-        if (checkVirusTotalKey(getGlobalOptions(), XOptions::getMainWidget(this))) {
-            g_jsonDocument = QJsonDocument();
+        g_jsonDocument = QJsonDocument();
 
-            XVirusTotal virusTotal;
+        XVirusTotal virusTotal;
 
-            connect(&virusTotal, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
+        connect(&virusTotal, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
 
-            virusTotal.setApiKey(sApiKey);
+        virusTotal.setApiKey(sApiKey);
 
-            bool bIsNotFound = false;
+        bool bIsNotFound = false;
 
-            if (bRescan) {
-                XVirusTotal _virusTotal;
-                _virusTotal.setApiKey(sApiKey);
-                _virusTotal.setDevice(g_pDevice);
-                _virusTotal.setParameter(g_sMD5);
-                _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+        if (bRescanFile) {
+            XVirusTotal _virusTotal;
+            _virusTotal.setApiKey(sApiKey);
+            _virusTotal.setDevice(g_pDevice);
+            _virusTotal.setParameter(g_sMD5);
+            _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
-                XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
+            XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
 
-                xotdp.showDialogDelay();
+            xotdp.showDialogDelay();
 
-                g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
-            } else {
-                g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);
+            g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
+        } else {
+            g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);
 
-                if (bIsNotFound) {
-                    // TODO upload
-                    if (QMessageBox::question(XOptions::getMainWidget(this), tr("Information"), tr("Upload the file for analyze?")) == QMessageBox::Yes) {
-                        XVirusTotal _virusTotal;
+            if (bIsNotFound) {
+                // TODO upload
+                if (QMessageBox::question(XOptions::getMainWidget(this), tr("Information"), tr("Upload the file for analyze?")) == QMessageBox::Yes) {
+                    XVirusTotal _virusTotal;
 
-                        connect(&_virusTotal, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
+                    connect(&_virusTotal, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
 
-                        _virusTotal.setApiKey(sApiKey);
-                        _virusTotal.setDevice(g_pDevice);
-                        _virusTotal.setParameter(g_sMD5);
-                        _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+                    _virusTotal.setApiKey(sApiKey);
+                    _virusTotal.setDevice(g_pDevice);
+                    _virusTotal.setParameter(g_sMD5);
+                    _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
-                        XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
+                    XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
 
-                        xotdp.showDialogDelay();
+                    xotdp.showDialogDelay();
 
-                        g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
-                    }
+                    g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
                 }
             }
+        }
 
-            if (!bIsNotFound) {
-                g_mode = MODE_EXISTS;
+        if (!bIsNotFound) {
+            g_mode = MODE_EXISTS;
 
-                showRecords();
-            } else {
-                g_mode = MODE_NOTFOUND;
-            }
+            showRecords();
         } else {
-            g_mode = MODE_NOAPIKEY;
+            g_mode = MODE_NOTFOUND;
         }
 
         ui->pushButtonSave->setEnabled(true);
@@ -223,7 +213,9 @@ void XVirusTotalWidget::registerShortcuts(bool bState)
 
 void XVirusTotalWidget::on_pushButtonReload_clicked()
 {
-    reload(false);
+    if (checkVirusTotalKey(getGlobalOptions(), XOptions::getMainWidget(this))) {
+        reload(false);
+    }
 }
 
 void XVirusTotalWidget::on_pushButtonSave_clicked()
@@ -233,7 +225,9 @@ void XVirusTotalWidget::on_pushButtonSave_clicked()
 
 void XVirusTotalWidget::on_pushButtonRescan_clicked()
 {
-    reload(true);
+    if (checkVirusTotalKey(getGlobalOptions(), XOptions::getMainWidget(this))) {
+        reload(true);
+    }
 }
 
 void XVirusTotalWidget::on_checkBoxShowDetects_stateChanged(int nValue)
