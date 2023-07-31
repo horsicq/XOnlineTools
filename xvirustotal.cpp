@@ -56,7 +56,6 @@ QString XVirusTotal::uploadFile(const QString &sFileName)
 
     if (file.open(QIODevice::ReadOnly)) {
         sResult = uploadFile(&file);
-
         file.close();
     }
 
