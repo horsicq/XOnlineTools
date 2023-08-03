@@ -73,7 +73,7 @@ private slots:
     void handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors);
 
 signals:
-    void errorMessage(QString sErrorMessage);
+    void errorMessage(const QString &sErrorMessage);
     void completed(qint64 nElapsed);
 
 private:
