@@ -27,6 +27,7 @@
 
 class XVirusTotal : public XOnlineTools {
     Q_OBJECT
+
 public:
     enum RTYPE {
         RTYPE_UNKNOWN = 0,
