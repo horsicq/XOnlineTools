@@ -32,7 +32,7 @@ XOnlineToolsDialogProcess::XOnlineToolsDialogProcess(QWidget *pParent, XOnlineTo
 
     connect(g_pThread, SIGNAL(started()), pOnlineTools, SLOT(process()));
     connect(pOnlineTools, SIGNAL(completed(qint64)), this, SLOT(onCompleted(qint64)));
-    connect(pOnlineTools, SIGNAL(errorMessage(QString)), this, SLOT(errorMessage(QString)));
+    connect(pOnlineTools, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
 
     g_pThread->start();
 }
