@@ -51,6 +51,7 @@ public:
     static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent = nullptr);
     bool showInBrowser();
     static bool showInBrowser(const QString &sHash);
+    virtual void adjustView();
 
 protected:
     virtual void registerShortcuts(bool bState);

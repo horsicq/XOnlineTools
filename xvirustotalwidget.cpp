@@ -251,3 +251,7 @@ bool XVirusTotalWidget::showInBrowser(const QString &sHash)
 {
     return QDesktopServices::openUrl(QUrl(XVirusTotal::getFileLink(sHash)));
 }
+
+void XVirusTotalWidget::adjustView()
+{
+}
