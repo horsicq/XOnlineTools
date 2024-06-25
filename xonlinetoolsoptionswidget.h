@@ -21,8 +21,7 @@
 #ifndef XONLINETOOLSOPTIONSWIDGET_H
 #define XONLINETOOLSOPTIONSWIDGET_H
 
-#include <QWidget>
-
+#include "xshortcutswidget.h"
 #include "xoptions.h"
 
 // TODO XShortcutsWidget
@@ -30,12 +29,14 @@ namespace Ui {
 class XOnlineToolsOptionsWidget;
 }
 
-class XOnlineToolsOptionsWidget : public QWidget {
+class XOnlineToolsOptionsWidget : public XShortcutsWidget {
     Q_OBJECT
 
 public:
     explicit XOnlineToolsOptionsWidget(QWidget *pParent = nullptr);
     ~XOnlineToolsOptionsWidget();
+
+    virtual void adjustView();
 
     void setOptions(XOptions *pOptions);
     static void setDefaultValues(XOptions *pOptions);
@@ -46,6 +47,9 @@ public slots:
 
 private slots:
     void on_pushButtonGetVirusTotalApiKey_clicked();
+
+protected:
+    virtual void registerShortcuts(bool bState);
 
 private:
     Ui::XOnlineToolsOptionsWidget *ui;

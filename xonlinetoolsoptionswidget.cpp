@@ -22,7 +22,7 @@
 
 #include "ui_xonlinetoolsoptionswidget.h"
 
-XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XOnlineToolsOptionsWidget)
+XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) : XShortcutsWidget(pParent), ui(new Ui::XOnlineToolsOptionsWidget)
 {
     ui->setupUi(this);
 
@@ -36,6 +36,11 @@ XOnlineToolsOptionsWidget::XOnlineToolsOptionsWidget(QWidget *pParent) : QWidget
 XOnlineToolsOptionsWidget::~XOnlineToolsOptionsWidget()
 {
     delete ui;
+}
+
+void XOnlineToolsOptionsWidget::adjustView()
+{
+
 }
 
 void XOnlineToolsOptionsWidget::setOptions(XOptions *pOptions)
@@ -64,4 +69,9 @@ void XOnlineToolsOptionsWidget::on_pushButtonGetVirusTotalApiKey_clicked()
 {
     QString sLink = "https://www.virustotal.com/gui/my-apikey";
     QDesktopServices::openUrl(QUrl(sLink));
+}
+
+void XOnlineToolsOptionsWidget::registerShortcuts(bool bState)
+{
+    Q_UNUSED(bState)
 }
