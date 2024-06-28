@@ -40,7 +40,6 @@ XOnlineToolsOptionsWidget::~XOnlineToolsOptionsWidget()
 
 void XOnlineToolsOptionsWidget::adjustView()
 {
-
 }
 
 void XOnlineToolsOptionsWidget::setOptions(XOptions *pOptions)
