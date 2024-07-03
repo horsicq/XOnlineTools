@@ -74,7 +74,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
             _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
             XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
-
+            xotdp.setGlobal(getShortcuts(), getGlobalOptions());
             xotdp.showDialogDelay();
 
             g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
@@ -94,7 +94,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
                     _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
                     XOnlineToolsDialogProcess xotdp(this, &_virusTotal);
-
+                    xotdp.setGlobal(getShortcuts(), getGlobalOptions());
                     xotdp.showDialogDelay();
 
                     g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
