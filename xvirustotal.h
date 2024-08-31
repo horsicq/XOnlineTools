@@ -21,8 +21,6 @@
 #ifndef XVIRUSTOTAL_H
 #define XVIRUSTOTAL_H
 
-#include <QThread>
-
 #include "xonlinetools.h"
 
 class XVirusTotal : public XOnlineTools {
