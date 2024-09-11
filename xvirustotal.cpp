@@ -216,7 +216,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
         sUrlPath = "/api/v3/files/" + sParameter;
         url.setPath(sUrlPath);
     } else if (rtype == RTYPE_UPLOADFILE) {
-        if (pDevice->size() < 32000000)  // TODO fix 32 mb
+        if (pDevice->size() < 32000000)  // TODO fix 32 mb mb options
         {
             sUrlPath = "/api/v3/files";
             url.setPath(sUrlPath);
