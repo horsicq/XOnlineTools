@@ -211,7 +211,7 @@ void XVirusTotalWidget::registerShortcuts(bool bState)
     // TODO
 }
 
-void XVirusTotalWidget::on_pushButtonReload_clicked()
+void XVirusTotalWidget::on_toolButtonReload_clicked()
 {
     if (checkVirusTotalKey(getGlobalOptions(), XOptions::getMainWidget(this))) {
         reload(false);

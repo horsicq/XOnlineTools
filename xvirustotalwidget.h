@@ -57,7 +57,7 @@ protected:
     virtual void registerShortcuts(bool bState);
 
 private slots:
-    void on_pushButtonReload_clicked();
+    void on_toolButtonReload_clicked();
     void on_pushButtonSave_clicked();
     void on_pushButtonRescan_clicked();
     void on_checkBoxShowDetects_stateChanged(int nValue);
