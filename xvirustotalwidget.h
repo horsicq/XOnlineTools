@@ -58,10 +58,10 @@ protected:
 
 private slots:
     void on_toolButtonReload_clicked();
-    void on_pushButtonSave_clicked();
-    void on_pushButtonRescan_clicked();
+    void on_toolButtonSave_clicked();
+    void on_toolButtonRescan_clicked();
     void on_checkBoxShowDetects_stateChanged(int nValue);
-    void on_pushButtonWebsite_clicked();
+    void on_toolButtonWebsite_clicked();
 
 private:
     Ui::XVirusTotalWidget *ui;

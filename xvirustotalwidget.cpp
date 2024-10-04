@@ -26,6 +26,19 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParen
 {
     ui->setupUi(this);
 
+    XOptions::adjustToolButton(ui->toolButtonReload, XOptions::ICONTYPE_RELOAD);
+    XOptions::adjustToolButton(ui->toolButtonSave, XOptions::ICONTYPE_SAVE);
+    XOptions::adjustToolButton(ui->toolButtonRescan, XOptions::ICONTYPE_RELOAD);
+    XOptions::adjustToolButton(ui->toolButtonWebsite, XOptions::ICONTYPE_VIRUSTOTAL);
+
+    ui->toolButtonReload->setToolTip(tr("Reload"));
+    ui->toolButtonSave->setToolTip(tr("Save"));
+    ui->toolButtonRescan->setToolTip(tr("Rescan"));
+    ui->toolButtonWebsite->setToolTip(tr("Website"));
+    ui->checkBoxShowDetects->setToolTip(tr("Show detects"));
+    ui->lineEditFirst->setToolTip(tr("First"));
+    ui->lineEditLast->setToolTip(tr("Last"));
+
     g_pDevice = nullptr;
     g_mode = MODE_UNKNOWN;
 }
@@ -110,9 +123,9 @@ void XVirusTotalWidget::reload(bool bRescanFile)
             g_mode = MODE_NOTFOUND;
         }
 
-        ui->pushButtonSave->setEnabled(true);
+        ui->toolButtonSave->setEnabled(true);
     } else {
-        ui->pushButtonSave->setEnabled(false);
+        ui->toolButtonSave->setEnabled(false);
     }
 
     //    if(g_mode==MODE_EXISTS)
@@ -218,12 +231,12 @@ void XVirusTotalWidget::on_toolButtonReload_clicked()
     }
 }
 
-void XVirusTotalWidget::on_pushButtonSave_clicked()
+void XVirusTotalWidget::on_toolButtonSave_clicked()
 {
     XShortcutsWidget::saveTableModel(ui->tableViewScanResult->model(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
 }
 
-void XVirusTotalWidget::on_pushButtonRescan_clicked()
+void XVirusTotalWidget::on_toolButtonRescan_clicked()
 {
     if (checkVirusTotalKey(getGlobalOptions(), XOptions::getMainWidget(this))) {
         reload(true);
@@ -237,7 +250,7 @@ void XVirusTotalWidget::on_checkBoxShowDetects_stateChanged(int nValue)
     showRecords();
 }
 
-void XVirusTotalWidget::on_pushButtonWebsite_clicked()
+void XVirusTotalWidget::on_toolButtonWebsite_clicked()
 {
     showInBrowser();
 }

@@ -32,7 +32,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButtonWebsite">
+      <widget class="QToolButton" name="toolButtonWebsite">
        <property name="text">
         <string>Website</string>
        </property>
@@ -52,7 +52,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonRescan">
+      <widget class="QToolButton" name="toolButtonRescan">
        <property name="text">
         <string>Rescan</string>
        </property>
@@ -66,7 +66,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonSave">
+      <widget class="QToolButton" name="toolButtonSave">
        <property name="text">
         <string>Save</string>
        </property>
