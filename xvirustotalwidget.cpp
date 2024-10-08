@@ -144,8 +144,6 @@ void XVirusTotalWidget::showRecords()
 
     QList<XVirusTotal::SCAN_RESULT> listRecords = XVirusTotal::getScanInfo(&g_jsonDocument, bShowDetected).listScanResult;
 
-    QAbstractItemModel *pOldModel = ui->tableViewScanResult->model();
-
     qint32 nNumberOfRecords = listRecords.count();
 
     QStandardItemModel *pModel = new QStandardItemModel(nNumberOfRecords, 4);
@@ -173,9 +171,7 @@ void XVirusTotalWidget::showRecords()
         pModel->setItem(i, 3, pItemResult);
     }
 
-    ui->tableViewScanResult->setModel(pModel);
-
-    deleteOldAbstractModel(&pOldModel);
+    ui->tableViewScanResult->setCustomModel(pModel, true);
 
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
     ui->tableViewScanResult->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
@@ -233,7 +229,7 @@ void XVirusTotalWidget::on_toolButtonReload_clicked()
 
 void XVirusTotalWidget::on_toolButtonSave_clicked()
 {
-    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->model(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
+    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->getProxyModel(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
 }
 
 void XVirusTotalWidget::on_toolButtonRescan_clicked()

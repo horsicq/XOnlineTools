@@ -82,7 +82,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableView" name="tableViewScanResult">
+    <widget class="XTableView" name="tableViewScanResult">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -139,6 +139,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>XTableView</class>
+   <extends>QTableView</extends>
+   <header>xtableview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
