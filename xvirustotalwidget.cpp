@@ -264,3 +264,10 @@ bool XVirusTotalWidget::showInBrowser(const QString &sHash)
 void XVirusTotalWidget::adjustView()
 {
 }
+
+void XVirusTotalWidget::reloadData(bool bSaveSelection)
+{
+    Q_UNUSED(bSaveSelection)
+
+    reload(false);
+}

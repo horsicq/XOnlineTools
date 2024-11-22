@@ -52,6 +52,7 @@ public:
     bool showInBrowser();
     static bool showInBrowser(const QString &sHash);
     virtual void adjustView();
+    virtual void reloadData(bool bSaveSelection);
 
 protected:
     virtual void registerShortcuts(bool bState);
