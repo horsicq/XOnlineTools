@@ -54,6 +54,12 @@ void XOnlineToolsOptionsWidget::setDefaultValues(XOptions *pOptions)
     pOptions->addID(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY, "");
 }
 
+void XOnlineToolsOptionsWidget::reloadData(bool bSaveSelection)
+{
+    Q_UNUSED(bSaveSelection)
+    reload();
+}
+
 void XOnlineToolsOptionsWidget::save()
 {
     g_pOptions->getLineEdit(ui->lineEditVirusTotalApiKey, XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY);
