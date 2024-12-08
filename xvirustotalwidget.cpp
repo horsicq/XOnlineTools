@@ -263,6 +263,8 @@ bool XVirusTotalWidget::showInBrowser(const QString &sHash)
 
 void XVirusTotalWidget::adjustView()
 {
+    getGlobalOptions()->adjustWidget(this, XOptions::ID_VIEW_FONT_CONTROLS);
+    getGlobalOptions()->adjustTableView(ui->tableViewScanResult, XOptions::ID_VIEW_FONT_TABLEVIEWS);
 }
 
 void XVirusTotalWidget::reloadData(bool bSaveSelection)
