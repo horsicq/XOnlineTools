@@ -7,7 +7,6 @@ endif()
 
 set(XVIRUSTOTALWIDGET_SOURCES
     ${XVIRUSTOTALWIDGET_SOURCES}
-    ${XFORMATS_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/xonlinetools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xonlinetools.h
     ${CMAKE_CURRENT_LIST_DIR}/xvirustotal.cpp
