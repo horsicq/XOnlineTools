@@ -265,6 +265,7 @@ void XVirusTotalWidget::adjustView()
 {
     getGlobalOptions()->adjustWidget(this, XOptions::ID_VIEW_FONT_CONTROLS);
     getGlobalOptions()->adjustTableView(ui->tableViewScanResult, XOptions::ID_VIEW_FONT_TABLEVIEWS);
+    ui->tableViewScanResult->adjust();
 }
 
 void XVirusTotalWidget::reloadData(bool bSaveSelection)
