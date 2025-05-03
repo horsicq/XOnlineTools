@@ -197,7 +197,7 @@ void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void XOnlineTools::_finished()
 {
-    XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);
+    XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex); //Check mb remove
 }
 
 void XOnlineTools::handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors)
