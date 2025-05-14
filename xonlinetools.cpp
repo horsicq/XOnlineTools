@@ -175,7 +175,7 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
     QNetworkReply *pReply = qobject_cast<QNetworkReply *>(sender());
 
     if (pReply) {
-        if (g_pPdStruct->bIsStop) {
+        if (XBinary::isPdStructStopped(g_pPdStruct)) {
             pReply->abort();
         }
     }
@@ -189,7 +189,7 @@ void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
     QNetworkReply *pReply = qobject_cast<QNetworkReply *>(sender());
 
     if (pReply) {
-        if (g_pPdStruct->bIsStop) {
+        if (XBinary::isPdStructStopped(g_pPdStruct)) {
             pReply->abort();
         }
     }
