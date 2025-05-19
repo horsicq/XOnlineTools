@@ -160,7 +160,9 @@ void XOnlineTools::process()
 
     bool bResult = _process();
 
-    g_pPdStruct->bIsStop = !(bResult);
+    if (!(bResult)) {
+        XBinary::setPdStructStopped(g_pPdStruct);
+    }
 
     XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);
 
