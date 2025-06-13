@@ -31,10 +31,11 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QThread>
+#include "xthreadobject.h"
 
 #include "xbinary.h"
 
-class XOnlineTools : public QObject {
+class XOnlineTools : public XThreadObject {
     Q_OBJECT
 
 public:
@@ -62,7 +63,7 @@ public:
     static QString getSslVersion();
 
 protected:
-    virtual bool _process();
+    virtual bool handleProcess();
 
 public slots:
     void process();
@@ -72,10 +73,6 @@ public slots:
 
 private slots:
     void handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors);
-
-signals:
-    void errorMessage(const QString &sErrorMessage);
-    void completed(qint64 nElapsed);
 
 private:
     QString g_sApiKey;

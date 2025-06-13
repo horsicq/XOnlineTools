@@ -20,7 +20,7 @@
  */
 #include "xonlinetools.h"
 
-XOnlineTools::XOnlineTools(QObject *pParent) : QObject(pParent)
+XOnlineTools::XOnlineTools(QObject *pParent) : XThreadObject(pParent)
 {
     g_pdStructEmpty = XBinary::createPdStruct();
     g_pPdStruct = &g_pdStructEmpty;
@@ -136,9 +136,9 @@ QString XOnlineTools::getSslVersion()
     return sResult;
 }
 
-bool XOnlineTools::_process()
+bool XOnlineTools::handleProcess()
 {
-    return false;
+    return false;  // This method should be overridden in derived classes
 }
 
 void XOnlineTools::process()
@@ -158,7 +158,7 @@ void XOnlineTools::process()
     g_nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
     XBinary::setPdStructInit(g_pPdStruct, g_nFreeIndex, 0);
 
-    bool bResult = _process();
+    bool bResult = handleProcess();
 
     if (!(bResult)) {
         XBinary::setPdStructStopped(g_pPdStruct);

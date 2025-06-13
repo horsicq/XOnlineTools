@@ -149,7 +149,7 @@ XVirusTotal::SCAN_INFO XVirusTotal::getFileScanInfo(const QString &sFileName, co
     return virusTotal.getScanInfo(sHash, bShowDetected);
 }
 
-bool XVirusTotal::_process()
+bool XVirusTotal::handleProcess()
 {
     bool bResult = false;
 

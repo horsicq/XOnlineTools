@@ -67,7 +67,7 @@ public:
     static SCAN_INFO getFileScanInfo(const QString &sFileName, const QString &sApiKey, bool bShowDetected);
 
 protected:
-    virtual bool _process();
+    virtual bool handleProcess();
 
 private:
     QByteArray sendRequest(RTYPE rtype, const QString &sParameter, QIODevice *pDevice = nullptr, bool *pbIsNotFound = nullptr);

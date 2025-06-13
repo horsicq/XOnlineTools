@@ -6,7 +6,6 @@ DEPENDPATH += $$PWD
 HEADERS += \
     $$PWD/dialogxvirustotal.h \
     $$PWD/xonlinetools.h \
-    $$PWD/xonlinetoolsdialogprocess.h \
     $$PWD/xonlinetoolsoptionswidget.h \
     $$PWD/xvirustotal.h \
     $$PWD/xvirustotalwidget.h
@@ -14,7 +13,6 @@ HEADERS += \
 SOURCES += \
     $$PWD/dialogxvirustotal.cpp \
     $$PWD/xonlinetools.cpp \
-    $$PWD/xonlinetoolsdialogprocess.cpp \
     $$PWD/xonlinetoolsoptionswidget.cpp \
     $$PWD/xvirustotal.cpp \
     $$PWD/xvirustotalwidget.cpp

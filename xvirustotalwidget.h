@@ -23,7 +23,8 @@
 
 #include <QStandardItemModel>
 
-#include "xonlinetoolsdialogprocess.h"
+#include "xdialogprocess.h"
+#include "xonlinetools.h"
 #include "xshortcutswidget.h"
 #include "xvirustotal.h"
 
