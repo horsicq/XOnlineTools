@@ -143,8 +143,6 @@ bool XOnlineTools::handleProcess()
 
 void XOnlineTools::process()
 {
-    QElapsedTimer scanTimer;
-    scanTimer.start();
 
     //    getPdStruct()->pdRecordOpt.bIsValid=true;
 
@@ -165,8 +163,6 @@ void XOnlineTools::process()
     }
 
     XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);
-
-    emit completed(scanTimer.elapsed());
 }
 
 void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
