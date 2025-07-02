@@ -143,7 +143,6 @@ bool XOnlineTools::handleProcess()
 
 void XOnlineTools::process()
 {
-
     //    getPdStruct()->pdRecordOpt.bIsValid=true;
 
     //    if(!(getPdStruct()->bIsStop))
