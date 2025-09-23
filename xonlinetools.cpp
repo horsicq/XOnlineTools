@@ -23,7 +23,7 @@
 XOnlineTools::XOnlineTools(QObject *pParent) : XThreadObject(pParent)
 {
     g_pdStructEmpty = XBinary::createPdStruct();
-    g_pPdStruct = &g_pdStructEmpty;
+    m_pPdStruct = &g_pdStructEmpty;
     g_mode = MODE_UNKNOWN;
     g_pDevice = nullptr;
     g_nFreeIndex = -1;
@@ -41,12 +41,12 @@ QString XOnlineTools::getApiKey()
 
 void XOnlineTools::setPdStruct(XBinary::PDSTRUCT *pPdStruct)
 {
-    g_pPdStruct = pPdStruct;
+    m_pPdStruct = pPdStruct;
 }
 
 XBinary::PDSTRUCT *XOnlineTools::getPdStruct()
 {
-    return g_pPdStruct;
+    return m_pPdStruct;
 }
 
 void XOnlineTools::setParameter(const QString &sParameter)
@@ -152,27 +152,27 @@ void XOnlineTools::process()
 
     //    getPdStruct()->pdRecordOpt.bFinished=true;
 
-    g_nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
-    XBinary::setPdStructInit(g_pPdStruct, g_nFreeIndex, 0);
+    g_nFreeIndex = XBinary::getFreeIndex(m_pPdStruct);
+    XBinary::setPdStructInit(m_pPdStruct, g_nFreeIndex, 0);
 
     bool bResult = handleProcess();
 
     if (!(bResult)) {
-        XBinary::setPdStructStopped(g_pPdStruct);
+        XBinary::setPdStructStopped(m_pPdStruct);
     }
 
-    XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);
+    XBinary::setPdStructFinished(m_pPdStruct, g_nFreeIndex);
 }
 
 void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
-    XBinary::setPdStructCurrent(g_pPdStruct, g_nFreeIndex, bytesSent);
-    XBinary::setPdStructTotal(g_pPdStruct, g_nFreeIndex, bytesTotal);
+    XBinary::setPdStructCurrent(m_pPdStruct, g_nFreeIndex, bytesSent);
+    XBinary::setPdStructTotal(m_pPdStruct, g_nFreeIndex, bytesTotal);
 
     QNetworkReply *pReply = qobject_cast<QNetworkReply *>(sender());
 
     if (pReply) {
-        if (XBinary::isPdStructStopped(g_pPdStruct)) {
+        if (XBinary::isPdStructStopped(m_pPdStruct)) {
             pReply->abort();
         }
     }
@@ -180,13 +180,13 @@ void XOnlineTools::_uploadProgress(qint64 bytesSent, qint64 bytesTotal)
 
 void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-    XBinary::setPdStructCurrent(g_pPdStruct, g_nFreeIndex, bytesReceived);
-    XBinary::setPdStructTotal(g_pPdStruct, g_nFreeIndex, bytesTotal);
+    XBinary::setPdStructCurrent(m_pPdStruct, g_nFreeIndex, bytesReceived);
+    XBinary::setPdStructTotal(m_pPdStruct, g_nFreeIndex, bytesTotal);
 
     QNetworkReply *pReply = qobject_cast<QNetworkReply *>(sender());
 
     if (pReply) {
-        if (XBinary::isPdStructStopped(g_pPdStruct)) {
+        if (XBinary::isPdStructStopped(m_pPdStruct)) {
             pReply->abort();
         }
     }
@@ -194,7 +194,7 @@ void XOnlineTools::_downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void XOnlineTools::_finished()
 {
-    XBinary::setPdStructFinished(g_pPdStruct, g_nFreeIndex);  // Check mb remove
+    XBinary::setPdStructFinished(m_pPdStruct, g_nFreeIndex);  // Check mb remove
 }
 
 void XOnlineTools::handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors)

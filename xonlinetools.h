@@ -76,7 +76,7 @@ private slots:
 
 private:
     QString g_sApiKey;
-    XBinary::PDSTRUCT *g_pPdStruct;
+    XBinary::PDSTRUCT *m_pPdStruct;
     XBinary::PDSTRUCT g_pdStructEmpty;
     MODE g_mode;
     QIODevice *g_pDevice;
