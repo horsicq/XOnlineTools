@@ -39,7 +39,7 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParen
     ui->lineEditFirst->setToolTip(tr("First"));
     ui->lineEditLast->setToolTip(tr("Last"));
 
-    g_pDevice = nullptr;
+    m_pDevice = nullptr;
     g_mode = MODE_UNKNOWN;
 }
 
@@ -51,7 +51,7 @@ XVirusTotalWidget::~XVirusTotalWidget()
 void XVirusTotalWidget::setData(QIODevice *pDevice)
 {
     // TODO Check API key
-    g_pDevice = pDevice;
+    m_pDevice = pDevice;
 
     g_sMD5 = XBinary::getHash(XBinary::HASH_MD5, pDevice);
 
@@ -82,7 +82,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
         if (bRescanFile) {
             XVirusTotal _virusTotal;
             _virusTotal.setApiKey(sApiKey);
-            _virusTotal.setDevice(g_pDevice);
+            _virusTotal.setDevice(m_pDevice);
             _virusTotal.setParameter(g_sMD5);
             _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
@@ -103,7 +103,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
                     connect(&_virusTotal, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
 
                     _virusTotal.setApiKey(sApiKey);
-                    _virusTotal.setDevice(g_pDevice);
+                    _virusTotal.setDevice(m_pDevice);
                     _virusTotal.setParameter(g_sMD5);
                     _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
@@ -231,7 +231,7 @@ void XVirusTotalWidget::on_toolButtonReload_clicked()
 
 void XVirusTotalWidget::on_toolButtonSave_clicked()
 {
-    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->getProxyModel(), XBinary::getResultFileName(g_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
+    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->getProxyModel(), XBinary::getResultFileName(m_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
 }
 
 void XVirusTotalWidget::on_toolButtonRescan_clicked()

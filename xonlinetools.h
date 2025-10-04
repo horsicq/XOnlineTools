@@ -79,7 +79,7 @@ private:
     XBinary::PDSTRUCT *m_pPdStruct;
     XBinary::PDSTRUCT g_pdStructEmpty;
     MODE g_mode;
-    QIODevice *g_pDevice;
+    QIODevice *m_pDevice;
     QString g_sParameter;
     qint32 g_nFreeIndex;
 };
