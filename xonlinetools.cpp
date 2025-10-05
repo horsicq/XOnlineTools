@@ -24,7 +24,7 @@ XOnlineTools::XOnlineTools(QObject *pParent) : XThreadObject(pParent)
 {
     g_pdStructEmpty = XBinary::createPdStruct();
     m_pPdStruct = &g_pdStructEmpty;
-    g_mode = MODE_UNKNOWN;
+    m_mode = MODE_UNKNOWN;
     m_pDevice = nullptr;
     g_nFreeIndex = -1;
 }
@@ -61,12 +61,12 @@ QString XOnlineTools::getParameter()
 
 void XOnlineTools::setMode(MODE mode)
 {
-    g_mode = mode;
+    m_mode = mode;
 }
 
 XOnlineTools::MODE XOnlineTools::getMode()
 {
-    return g_mode;
+    return m_mode;
 }
 
 void XOnlineTools::setDevice(QIODevice *pDevice)

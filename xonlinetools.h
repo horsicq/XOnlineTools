@@ -78,7 +78,7 @@ private:
     QString g_sApiKey;
     XBinary::PDSTRUCT *m_pPdStruct;
     XBinary::PDSTRUCT g_pdStructEmpty;
-    MODE g_mode;
+    MODE m_mode;
     QIODevice *m_pDevice;
     QString g_sParameter;
     qint32 g_nFreeIndex;

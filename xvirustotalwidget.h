@@ -69,7 +69,7 @@ private:
     Ui::XVirusTotalWidget *ui;
     QIODevice *m_pDevice;
     QString g_sMD5;
-    MODE g_mode;
+    MODE m_mode;
     QJsonDocument g_jsonDocument;
 };
 

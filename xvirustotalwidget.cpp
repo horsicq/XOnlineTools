@@ -40,7 +40,7 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParen
     ui->lineEditLast->setToolTip(tr("Last"));
 
     m_pDevice = nullptr;
-    g_mode = MODE_UNKNOWN;
+    m_mode = MODE_UNKNOWN;
 }
 
 XVirusTotalWidget::~XVirusTotalWidget()
@@ -60,15 +60,15 @@ void XVirusTotalWidget::setData(QIODevice *pDevice)
 
 void XVirusTotalWidget::reload(bool bRescanFile)
 {
-    g_mode = MODE_UNKNOWN;
+    m_mode = MODE_UNKNOWN;
 
     QString sApiKey = getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
     if (sApiKey == "") {
-        g_mode = MODE_NOAPIKEY;
+        m_mode = MODE_NOAPIKEY;
     }
 
-    if (g_mode != MODE_NOAPIKEY) {
+    if (m_mode != MODE_NOAPIKEY) {
         g_jsonDocument = QJsonDocument();
 
         XVirusTotal virusTotal;
@@ -118,11 +118,11 @@ void XVirusTotalWidget::reload(bool bRescanFile)
         }
 
         if (!bIsNotFound) {
-            g_mode = MODE_EXISTS;
+            m_mode = MODE_EXISTS;
 
             showRecords();
         } else {
-            g_mode = MODE_NOTFOUND;
+            m_mode = MODE_NOTFOUND;
         }
 
         ui->toolButtonSave->setEnabled(true);
@@ -130,7 +130,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
         ui->toolButtonSave->setEnabled(false);
     }
 
-    //    if(g_mode==MODE_EXISTS)
+    //    if(m_mode==MODE_EXISTS)
     //    {
     //        ui->pushButtonRescan->setEnabled(true);
     //    }
