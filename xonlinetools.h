@@ -75,13 +75,13 @@ private slots:
     void handleSslErrors(QNetworkReply *pReply, const QList<QSslError> &listErrors);
 
 private:
-    QString g_sApiKey;
+    QString m_sApiKey;
     XBinary::PDSTRUCT *m_pPdStruct;
-    XBinary::PDSTRUCT g_pdStructEmpty;
+    XBinary::PDSTRUCT m_pdStructEmpty;
     MODE m_mode;
     QIODevice *m_pDevice;
-    QString g_sParameter;
-    qint32 g_nFreeIndex;
+    QString m_sParameter;
+    qint32 m_nFreeIndex;
 };
 
 #endif  // XONLINETOOLS_H
