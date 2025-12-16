@@ -53,7 +53,7 @@ void XVirusTotalWidget::setData(QIODevice *pDevice)
     // TODO Check API key
     m_pDevice = pDevice;
 
-    g_sMD5 = XBinary::getHash(XBinary::HASH_MD5, pDevice);
+    m_sMD5 = XBinary::getHash(XBinary::HASH_MD5, pDevice);
 
     reload(false);
 }
@@ -69,7 +69,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
     }
 
     if (m_mode != MODE_NOAPIKEY) {
-        g_jsonDocument = QJsonDocument();
+        m_jsonDocument = QJsonDocument();
 
         XVirusTotal virusTotal;
 
@@ -83,7 +83,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
             XVirusTotal _virusTotal;
             _virusTotal.setApiKey(sApiKey);
             _virusTotal.setDevice(m_pDevice);
-            _virusTotal.setParameter(g_sMD5);
+            _virusTotal.setParameter(m_sMD5);
             _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
             XDialogProcess xotdp(this, &_virusTotal);
@@ -91,9 +91,9 @@ void XVirusTotalWidget::reload(bool bRescanFile)
             xotdp.start();
             xotdp.showDialogDelay();
 
-            g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
+            m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);  // mb TODO
         } else {
-            g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);
+            m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);
 
             if (bIsNotFound) {
                 // TODO upload
@@ -104,7 +104,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
 
                     _virusTotal.setApiKey(sApiKey);
                     _virusTotal.setDevice(m_pDevice);
-                    _virusTotal.setParameter(g_sMD5);
+                    _virusTotal.setParameter(m_sMD5);
                     _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
 
                     XDialogProcess xotdp(this, &_virusTotal);
@@ -112,7 +112,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
                     xotdp.start();
                     xotdp.showDialogDelay();
 
-                    g_jsonDocument = virusTotal.getFileInfo(g_sMD5, &bIsNotFound);  // mb TODO
+                    m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);  // mb TODO
                 }
             }
         }
@@ -144,7 +144,7 @@ void XVirusTotalWidget::showRecords()
 {
     bool bShowDetected = ui->checkBoxShowDetects->isChecked();
 
-    QList<XVirusTotal::SCAN_RESULT> listRecords = XVirusTotal::getScanInfo(&g_jsonDocument, bShowDetected).listScanResult;
+    QList<XVirusTotal::SCAN_RESULT> listRecords = XVirusTotal::getScanInfo(&m_jsonDocument, bShowDetected).listScanResult;
 
     qint32 nNumberOfRecords = listRecords.count();
 
@@ -184,7 +184,7 @@ void XVirusTotalWidget::showRecords()
     ui->tableViewScanResult->setColumnWidth(1, 100);
     ui->tableViewScanResult->setColumnWidth(2, 100);
 
-    XVirusTotal::SCAN_INFO scanInfo = XVirusTotal::getScanInfo(&g_jsonDocument, false);
+    XVirusTotal::SCAN_INFO scanInfo = XVirusTotal::getScanInfo(&m_jsonDocument, false);
 
     if (scanInfo.dtFirstScan.isValid()) {
         ui->lineEditFirst->setText(scanInfo.dtFirstScan.toString("yyyy-MM-dd hh:mm:ss"));
@@ -255,7 +255,7 @@ void XVirusTotalWidget::on_toolButtonWebsite_clicked()
 
 bool XVirusTotalWidget::showInBrowser()
 {
-    return showInBrowser(g_sMD5);
+    return showInBrowser(m_sMD5);
 }
 
 bool XVirusTotalWidget::showInBrowser(const QString &sHash)

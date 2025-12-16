@@ -68,9 +68,9 @@ private slots:
 private:
     Ui::XVirusTotalWidget *ui;
     QIODevice *m_pDevice;
-    QString g_sMD5;
+    QString m_sMD5;
     MODE m_mode;
-    QJsonDocument g_jsonDocument;
+    QJsonDocument m_jsonDocument;
 };
 
 #endif  // XVIRUSTOTALWIDGET_H
