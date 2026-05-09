@@ -52,11 +52,11 @@ public:
     static bool checkVirusTotalKey(XOptions *pOptions, QWidget *pParent = nullptr);
     bool showInBrowser();
     static bool showInBrowser(const QString &sHash);
-    virtual void adjustView();
-    virtual void reloadData(bool bSaveSelection);
+    void adjustView() override;
+    void reloadData(bool bSaveSelection) override;
 
 protected:
-    virtual void registerShortcuts(bool bState);
+    void registerShortcuts(bool bState) override;
 
 private slots:
     void on_toolButtonReload_clicked();

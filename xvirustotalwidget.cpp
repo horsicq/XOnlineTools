@@ -64,7 +64,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
 
     QString sApiKey = getGlobalOptions()->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    if (sApiKey == "") {
+    if (sApiKey.isEmpty()) {
         m_mode = MODE_NOAPIKEY;
     }
 
@@ -91,7 +91,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
             xotdp.start();
             xotdp.showDialogDelay();
 
-            m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);  // mb TODO
+            m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);
         } else {
             m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);
 
@@ -112,7 +112,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
                     xotdp.start();
                     xotdp.showDialogDelay();
 
-                    m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);  // mb TODO
+                    m_jsonDocument = virusTotal.getFileInfo(m_sMD5, &bIsNotFound);
                 }
             }
         }
@@ -130,14 +130,6 @@ void XVirusTotalWidget::reload(bool bRescanFile)
         ui->toolButtonSave->setEnabled(false);
     }
 
-    //    if(m_mode==MODE_EXISTS)
-    //    {
-    //        ui->pushButtonRescan->setEnabled(true);
-    //    }
-    //    else
-    //    {
-    //        ui->pushButtonRescan->setEnabled(false);
-    //    }
 }
 
 void XVirusTotalWidget::showRecords()
@@ -197,23 +189,16 @@ void XVirusTotalWidget::showRecords()
 
 bool XVirusTotalWidget::checkVirusTotalKey(XOptions *pOptions, QWidget *pParent)
 {
-    bool bResult = false;
-
     QString sApiKey = pOptions->getValue(XOptions::ID_ONLINETOOLS_VIRUSTOTAL_APIKEY).toString();
 
-    if (sApiKey != "") {
-        bResult = true;
-    }
-
-    if (!bResult) {
+    if (sApiKey.isEmpty()) {
         QString sInfo = tr("Please use valid API key");
-
         sInfo += QString("\n\n %1 -> %2 -> %3").arg(tr("Options"), tr("Online tools"), QString("VirusTotal API key"));
-
         QMessageBox::critical(pParent, tr("Error"), sInfo);
+        return false;
     }
 
-    return bResult;
+    return true;
 }
 
 void XVirusTotalWidget::registerShortcuts(bool bState)
@@ -231,7 +216,7 @@ void XVirusTotalWidget::on_toolButtonReload_clicked()
 
 void XVirusTotalWidget::on_toolButtonSave_clicked()
 {
-    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->getProxyModel(), XBinary::getResultFileName(m_pDevice, QString("%1.txt").arg(QString("VirusTotal"))));
+    XShortcutsWidget::saveTableModel(ui->tableViewScanResult->getProxyModel(), XBinary::getResultFileName(m_pDevice, QString("%1.txt").arg("VirusTotal")));
 }
 
 void XVirusTotalWidget::on_toolButtonRescan_clicked()
