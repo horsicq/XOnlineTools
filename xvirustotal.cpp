@@ -20,25 +20,39 @@
  */
 #include "xvirustotal.h"
 
+namespace {
+QJsonDocument parseJsonResponse(const QByteArray &baData)
+{
+    QJsonParseError parseError = {};
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(baData, &parseError);
+
+    if ((parseError.error != QJsonParseError::NoError) || jsonDocument.isNull()) {
+        return QJsonDocument();
+    }
+
+    return jsonDocument;
+}
+}  // namespace
+
 XVirusTotal::XVirusTotal(QObject *pParent) : XOnlineTools(pParent)
 {
 }
 
 QJsonDocument XVirusTotal::getFileInfo(const QString &sHash, bool *pbIsNotFound)
 {
-    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEINFO, sHash, nullptr, pbIsNotFound));
+    return parseJsonResponse(sendRequest(RTYPE_GETFILEINFO, sHash, nullptr, pbIsNotFound));
 }
 
 QJsonDocument XVirusTotal::getFileAnalyses(const QString &sId)
 {
-    return QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES, sId));
+    return parseJsonResponse(sendRequest(RTYPE_GETFILEANALYSES, sId));
 }
 
 QString XVirusTotal::uploadFile(QIODevice *pDevice, const QString &sName)
 {
     QString sResult;
 
-    QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_UPLOADFILE, sName, pDevice));
+    QJsonDocument jsDoc = parseJsonResponse(sendRequest(RTYPE_UPLOADFILE, sName, pDevice));
 
     if (jsDoc.isObject()) {
         sResult = jsDoc.object()["data"].toObject()["id"].toString();
@@ -66,7 +80,7 @@ QString XVirusTotal::rescanFile(const QString &sHash)
 {
     QString sResult;
 
-    QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_RESCANFILE, sHash));
+    QJsonDocument jsDoc = parseJsonResponse(sendRequest(RTYPE_RESCANFILE, sHash));
 
     if (jsDoc.isObject()) {
         sResult = jsDoc.object()["data"].toObject()["id"].toString();
@@ -123,7 +137,7 @@ XVirusTotal::SCAN_INFO XVirusTotal::getScanInfo(QJsonDocument *pJsonDoc, bool bS
             }
         }
 
-        result.sStatus = QString("%1/%2").arg(QString::number(nNumberOfDetects), QString::number(nCount));
+        result.sStatus = QString("%1/%2").arg(QString::number(nNumberOfDetects)).arg(QString::number(nCount));
     }
 
     return result;
@@ -170,7 +184,7 @@ bool XVirusTotal::handleProcess()
 
         if (sId != "") {
             while (!(getPdStruct()->bIsStop)) {
-                QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_GETFILEANALYSES, sId));
+                QJsonDocument jsDoc = parseJsonResponse(sendRequest(RTYPE_GETFILEANALYSES, sId));
 
                 QString sStatus;
 
@@ -178,7 +192,12 @@ bool XVirusTotal::handleProcess()
                     sStatus = jsDoc.object()["data"].toObject()["attributes"].toObject()["status"].toString();
                 }
 
-                if ((sStatus == "") || (sStatus == "completed")) {
+                if (sStatus == "completed") {
+                    bResult = true;
+                    break;
+                }
+
+                if (sStatus == "") {
                     break;
                 }
 
@@ -216,18 +235,24 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
         sUrlPath = "/api/v3/files/" + sParameter;
         url.setPath(sUrlPath);
     } else if (rtype == RTYPE_UPLOADFILE) {
-        if (pDevice->size() < 32000000)  // TODO fix 32 mb mb options
+        if (pDevice && (pDevice->size() < 32000000))  // TODO fix 32 mb mb options
         {
             sUrlPath = "/api/v3/files";
             url.setPath(sUrlPath);
         } else {
-            QJsonDocument jsDoc = QJsonDocument::fromJson(sendRequest(RTYPE_GETUPLOADLINK, ""));
+            QJsonDocument jsDoc = parseJsonResponse(sendRequest(RTYPE_GETUPLOADLINK, ""));
 
             if (jsDoc.isObject()) {
                 //                QString sString=jsDoc.object()["data"].toVariant().toString();
                 QString sString = jsDoc.object()["data"].toString();
-                url.setQuery(sString);
-                sUrlPath = sString.section(".com/", 1, 1);
+                QUrl uploadUrl(sString);
+
+                if (uploadUrl.isValid() && (uploadUrl.scheme() == "https") && !uploadUrl.host().isEmpty()) {
+                    url = uploadUrl;
+                    sUrlPath = uploadUrl.path();
+                } else {
+                    emit errorMessage(tr("Invalid upload URL"));
+                }
             }
         }
     } else if (rtype == RTYPE_GETFILEANALYSES) {
@@ -242,6 +267,9 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
     }
 
     networkRequest.setUrl(url);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    networkRequest.setTransferTimeout(30000);
+#endif
     networkRequest.setRawHeader("x-apikey", getApiKey().toLatin1());
 
     QNetworkReply *pReply = nullptr;
@@ -250,7 +278,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
     if ((rtype == RTYPE_GETFILEINFO) || (rtype == RTYPE_GETFILEANALYSES) || (rtype == RTYPE_GETUPLOADLINK)) {
         pReply = networkAccessManager.get(networkRequest);
     } else if (rtype == RTYPE_UPLOADFILE) {
-        if (sUrlPath != "") {
+            if (pDevice && (sUrlPath != "")) {
             pMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
             QHttpPart filePart;
@@ -303,6 +331,8 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
             qDebug("%s", pReply->errorString().toLatin1().data());
 #endif
         }
+
+        pReply->deleteLater();
     }
 
     if (pMultiPart) {

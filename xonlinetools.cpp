@@ -90,16 +90,25 @@ bool XOnlineTools::isPagePresent(const QString &sUrl)
             SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));  // TODO Check connect
 
     networkRequest.setUrl(QUrl(sUrl));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    networkRequest.setTransferTimeout();
+#endif
     QNetworkReply *pReply = networkAccessManager.get(networkRequest);
     QEventLoop loop;
     QObject::connect(pReply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    if (pReply->bytesAvailable()) {
+    qint32 nHttpStatus = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    bool bHttpOk = (nHttpStatus == 0) || ((nHttpStatus >= 200) && (nHttpStatus < 400));
+
+    if ((pReply->error() == QNetworkReply::NoError) && bHttpOk && pReply->bytesAvailable()) {
         bResult = true;
     } else {
         bResult = false;
+        emit errorMessage(pReply->errorString());
     }
+
+    pReply->deleteLater();
 
     return bResult;
 }
@@ -114,15 +123,25 @@ QString XOnlineTools::getPageContent(const QString &sUrl)
     connect(&networkAccessManager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this, SLOT(handleSslErrors(QNetworkReply *, const QList<QSslError> &)));
 
     networkRequest.setUrl(QUrl(sUrl));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    networkRequest.setTransferTimeout();
+#endif
 
     QNetworkReply *pReply = networkAccessManager.get(networkRequest);
     QEventLoop loop;
     QObject::connect(pReply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    if (pReply->bytesAvailable()) {
+    qint32 nHttpStatus = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    bool bHttpOk = (nHttpStatus == 0) || ((nHttpStatus >= 200) && (nHttpStatus < 400));
+
+    if ((pReply->error() == QNetworkReply::NoError) && bHttpOk && pReply->bytesAvailable()) {
         sResult = pReply->readAll();
+    } else {
+        emit errorMessage(pReply->errorString());
     }
+
+    pReply->deleteLater();
 
     return sResult;
 }
@@ -207,5 +226,5 @@ void XOnlineTools::handleSslErrors(QNetworkReply *pReply, const QList<QSslError>
         sError = listErrors.at(0).errorString();  // The first error
     }
 
-    emit errorMessage(QString("%1(%2)").arg(sError, XOnlineTools::getSslVersion()));
+    emit errorMessage(QString("%1(%2)").arg(sError).arg(XOnlineTools::getSslVersion()));
 }
