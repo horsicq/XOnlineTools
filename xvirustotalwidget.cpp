@@ -129,7 +129,6 @@ void XVirusTotalWidget::reload(bool bRescanFile)
     } else {
         ui->toolButtonSave->setEnabled(false);
     }
-
 }
 
 void XVirusTotalWidget::showRecords()

@@ -278,7 +278,7 @@ QByteArray XVirusTotal::sendRequest(RTYPE rtype, const QString &sParameter, QIOD
     if ((rtype == RTYPE_GETFILEINFO) || (rtype == RTYPE_GETFILEANALYSES) || (rtype == RTYPE_GETUPLOADLINK)) {
         pReply = networkAccessManager.get(networkRequest);
     } else if (rtype == RTYPE_UPLOADFILE) {
-            if (pDevice && (sUrlPath != "")) {
+        if (pDevice && (sUrlPath != "")) {
             pMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
             QHttpPart filePart;
