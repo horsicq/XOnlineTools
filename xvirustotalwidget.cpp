@@ -88,6 +88,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
 
             XDialogProcess xotdp(this, &_virusTotal);
             xotdp.setGlobal(getShortcuts(), getGlobalOptions());
+            _virusTotal.setPdStruct(xotdp.getPdStruct());
             xotdp.start();
             xotdp.showDialogDelay();
 
@@ -109,6 +110,7 @@ void XVirusTotalWidget::reload(bool bRescanFile)
 
                     XDialogProcess xotdp(this, &_virusTotal);
                     xotdp.setGlobal(getShortcuts(), getGlobalOptions());
+                    _virusTotal.setPdStruct(xotdp.getPdStruct());
                     xotdp.start();
                     xotdp.showDialogDelay();
 
