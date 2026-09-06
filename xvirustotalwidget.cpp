@@ -39,6 +39,8 @@ XVirusTotalWidget::XVirusTotalWidget(QWidget *pParent) : XShortcutsWidget(pParen
     ui->lineEditFirst->setToolTip(tr("First"));
     ui->lineEditLast->setToolTip(tr("Last"));
 
+    ui->labelHint->hide();
+
     m_pDevice = nullptr;
     m_mode = MODE_UNKNOWN;
 }
@@ -69,6 +71,8 @@ void XVirusTotalWidget::reload(bool bRescanFile)
     }
 
     if (m_mode != MODE_NOAPIKEY) {
+        ui->labelHint->hide();
+
         m_jsonDocument = QJsonDocument();
 
         XVirusTotal virusTotal;
@@ -80,11 +84,11 @@ void XVirusTotalWidget::reload(bool bRescanFile)
         bool bIsNotFound = false;
 
         if (bRescanFile) {
+            // Rescan: ask VirusTotal to re-analyze the file it already has (by hash); the file is not uploaded
             XVirusTotal _virusTotal;
             _virusTotal.setApiKey(sApiKey);
-            _virusTotal.setDevice(m_pDevice);
             _virusTotal.setParameter(m_sMD5);
-            _virusTotal.setMode(XOnlineTools::MODE_UPLOAD);
+            _virusTotal.setMode(XOnlineTools::MODE_RESCAN);
 
             XDialogProcess xotdp(this, &_virusTotal);
             xotdp.setGlobal(getShortcuts(), getGlobalOptions());
@@ -129,6 +133,12 @@ void XVirusTotalWidget::reload(bool bRescanFile)
 
         ui->toolButtonSave->setEnabled(true);
     } else {
+        QString sInfo = tr("Please use valid API key");
+        sInfo += QString(" (%1 -> %2 -> %3)").arg(tr("Options"), tr("Online tools"), QString("VirusTotal API key"));
+
+        ui->labelHint->setText(sInfo);
+        ui->labelHint->show();
+
         ui->toolButtonSave->setEnabled(false);
     }
 }

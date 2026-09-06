@@ -82,6 +82,16 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="labelHint">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="XTableView" name="tableViewScanResult">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
